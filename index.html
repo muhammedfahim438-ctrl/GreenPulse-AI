@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenPulse AI — Smart Farming Platform</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ══════════════════════════════
+       RESET & CSS VARIABLES
+    ══════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark:   #0d3320;
+      --green-mid:    #1a5c38;
+      --green-bright: #2ecc71;
+      --green-soft:   #a8f0c6;
+      --gold:         #f0c040;
+      --cream:        #f7f4ee;
+      --white:        #ffffff;
+      --text-dark:    #0d1f14;
+      --text-muted:   #4a6558;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       NAVBAR
+    ══════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(13, 51, 32, 0.97);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--green-bright);
+    }
+    .logo span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav ul a {
+      color: var(--green-soft);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--green-bright); }
+
+    .nav-cta {
+      background: var(--green-bright) !important;
+      color: var(--green-dark) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46,204,113,0.4) !important;
+    }
+
+    /* ══════════════════════════════
+       HERO SECTION
+    ══════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(
+        160deg,
+        var(--green-dark) 0%,
+        #143d24 55%,
+        #1f6b40 100%
+      );
+      display: flex;
+      align-items: center;
+      padding: 7rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* dot pattern background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle, rgba(46,204,113,0.05) 1px, transparent 1px
+      );
+      background-size: 30px 30px;
+    }
+
+    .hero-content {
+      max-width: 650px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* small green pill badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(46,204,113,0.15);
+      border: 1px solid rgba(46,204,113,0.3);
+      color: var(--green-soft);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1 .highlight { color: var(--green-bright); }
+    h1 .gold      { color: var(--gold); }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      max-width: 520px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    /* green filled button */
+    .btn-primary {
+      background: var(--green-bright);
+      color: var(--green-dark);
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(46,204,113,0.4);
+    }
+
+    /* transparent outline button */
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--green-bright);
+      background: rgba(46,204,113,0.1);
+    }
+
+    /* stats row below buttons */
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3.5rem;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--green-bright);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.2rem;
+    }
+
+    /* floating emoji on right */
+    .hero-visual {
+      position: absolute;
+      right: 8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10rem;
+      animation: float 3s ease-in-out infinite;
+      user-select: none;
+    }
+
+    /* ══════════════════════════════
+       FEATURES SECTION
+    ══════════════════════════════ */
+    .section {
+      padding: 6rem 4rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-title span { color: var(--green-mid); }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    /* 3 column grid for feature cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1.5px solid #e5ede8;
+      border-radius: 20px;
+      padding: 2rem;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(26,92,56,0.12);
+      border-color: var(--green-bright);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+      color: var(--text-dark);
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* different background colors for each icon */
+    .ic-green  { background: #e8f8f0; }
+    .ic-yellow { background: #fff8e6; }
+    .ic-red    { background: #fce8e8; }
+    .ic-blue   { background: #e8f0ff; }
+    .ic-purple { background: #f0e8ff; }
+    .ic-teal   { background: #e8fff8; }
+
+    /* ══════════════════════════════
+       HOW IT WORKS SECTION
+    ══════════════════════════════ */
+    .how-section {
+      background: var(--green-dark);
+      padding: 6rem 4rem;
+    }
+    .how-section .section-title { color: var(--white); }
+    .how-section .section-label { color: var(--green-soft); }
+    .how-section .section-sub   { color: rgba(255,255,255,0.6); }
+
+    .steps {
+      display: flex;
+      margin-top: 3rem;
+      position: relative;
+    }
+
+    /* horizontal line connecting steps */
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(
+        to right, var(--green-bright), var(--gold)
+      );
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 0 1rem;
+    }
+
+    .step-num {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      color: var(--green-dark);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      border: 3px solid var(--green-dark);
+    }
+
+    .step h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .step p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       CALL TO ACTION SECTION
+    ══════════════════════════════ */
+    .cta-section {
+      background: linear-gradient(
+        135deg, var(--green-mid), var(--green-dark)
+      );
+      padding: 5rem 4rem;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .cta-section p {
+      color: rgba(255,255,255,0.7);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: #070f0a;
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.85rem;
+    }
+
+    /* ══════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(-50%); }
+      50%       { transform: translateY(calc(-50% - 20px)); }
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE - MOBILE
+    ══════════════════════════════ */
+    @media (max-width: 768px) {
+      nav               { padding: 1rem 1.5rem; }
+      nav ul            { display: none; }
+      .hero             { padding: 6rem 1.5rem 3rem; }
+      .hero-visual      { display: none; }
+      .section          { padding: 4rem 1.5rem; }
+      .how-section      { padding: 4rem 1.5rem; }
+      .cta-section      { padding: 4rem 1.5rem; }
+      .steps            { flex-direction: column; gap: 2rem; }
+      .steps::before    { display: none; }
+      footer            { flex-direction: column; gap: 1rem;
+                          text-align: center; padding: 1.5rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ NAVBAR ════════════ -->
+  <nav>
+    <div class="logo">Green<span>Pulse</span> AI</div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="register.html" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════════════ HERO ════════════ -->
+  <section class="hero">
+    <div class="hero-content">
+
+      <div class="hero-badge">🌱 AI-Powered Agriculture Platform</div>
+
+      <h1>
+        Smart Farming<br>
+        for a <span class="highlight">Greener</span><br>
+        <span class="gold">Future</span>
+      </h1>
+
+      <p class="hero-desc">
+        GreenPulse AI helps farmers predict crop yields, detect
+        plant diseases, monitor weather, and receive smart alerts
+        — all powered by machine learning.
+      </p>
+
+      <div class="hero-actions">
+        <a href="register.html" class="btn-primary">
+          🌾 Start for Free
+        </a>
+        <a href="dashboard.html" class="btn-outline">
+          View Dashboard →
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">94%</div>
+          <div class="stat-label">Prediction Accuracy</div>
+        </div>
+        <div>
+          <div class="stat-num">12K+</div>
+          <div class="stat-label">Farmers Using It</div>
+        </div>
+        <div>
+          <div class="stat-num">30%</div>
+          <div class="stat-label">Avg Yield Increase</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="hero-visual">🌿</div>
+  </section>
+
+  <!-- ════════════ FEATURES ════════════ -->
+  <section class="section" id="features">
+
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">
+      Everything a farmer<br>
+      <span>needs in one place</span>
+    </h2>
+    <p class="section-sub">
+      From AI predictions to real-time weather alerts,
+      GreenPulse AI covers every aspect of modern smart farming.
+    </p>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon ic-green">🌾</div>
+        <h3>Crop Yield Prediction</h3>
+        <p>Enter your farm data and our AI model predicts
+           expected crop yield in tons per hectare.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon ic-yellow">🔬</div>
+        <h3>Disease Detection</h3>
+        <p>Upload a photo of your plant leaf. Our CNN model
+           identifies diseases with confidence scores.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon ic-red">🌦️</div>
+        <h3>Weather Monitoring</h3>
+        <p>Real-time weather data including temperature,
+           humidity and rainfall forecasts.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon ic-blue">📧</div>
+        <h3>Email Alerts</h3>
+        <p>Automated email notifications when temperature
+           spikes or heavy rain is forecast.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon ic-purple">📊</div>
+        <h3>Crop Risk Score</h3>
+        <p>A smart risk index calculated from temperature,
+           humidity, rainfall and disease probability.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon ic-teal">🤖</div>
+        <h3>AI Farming Assistant</h3>
+        <p>Ask farming questions and get instant AI-powered
+           advice on fertilizers and crop management.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ HOW IT WORKS ════════════ -->
+  <section class="how-section" id="how">
+
+    <div class="section-label">Simple Process</div>
+    <h2 class="section-title">How GreenPulse AI Works</h2>
+    <p class="section-sub">
+      Get started in minutes and let AI handle the
+      complex analysis for your farm.
+    </p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Register Your Farm</h4>
+        <p>Create your farmer profile with crop type,
+           farm size and location.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Enter Farm Data</h4>
+        <p>Input soil type, rainfall, temperature
+           and humidity data.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>AI Analyzes Data</h4>
+        <p>Our machine learning models process
+           your data and generate predictions.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Get Smart Insights</h4>
+        <p>View yield forecasts, disease alerts
+           and risk scores on your dashboard.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ CTA ════════════ -->
+  <section class="cta-section">
+    <h2>Ready to grow smarter?</h2>
+    <p>
+      Join thousands of farmers using AI to increase yield,
+      reduce losses and farm more sustainably.
+    </p>
+    <a href="register.html" class="btn-primary"
+       style="font-size:1.1rem; padding:1rem 2.5rem;">
+      🌱 Create Free Account
+    </a>
+  </section>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer>
+    <div class="logo">Green<span>Pulse</span> AI</div>
+    <p>© 2025 GreenPulse AI. Built for farmers, powered by AI.</p>
+  </footer>
+
+</body>
+</html>
