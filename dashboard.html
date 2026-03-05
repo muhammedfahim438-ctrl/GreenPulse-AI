@@ -586,7 +586,27 @@
         </p>
       </div>
       <div class="topbar-right">
-        <div class="weather-pill">🌤️ 34°C · Sunny · Pune</div>
+        <div class="weather-pill" style="display:flex;align-items:center;gap:0.5rem">
+  <span id="weatherPill">🌤️ Loading...</span>
+  <input
+    type="text"
+    id="cityInput"
+    placeholder="Enter city..."
+    value="Chennai"
+    style="
+      border: none;
+      background: transparent;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      width: 100px;
+      outline: none;
+      cursor: pointer;
+      font-weight: 600;
+    "
+    onchange="changeCity(this.value)"
+  />
+</div>
         <div class="alert-btn">
           🔔
           <div class="alert-dot"></div>
@@ -625,8 +645,9 @@
           <span class="kpi-icon">🌡️</span>
         </div>
         <div class="kpi-value">
-          34 <span class="kpi-unit">°C</span>
-        </div>
+  <span id="tempValue">34</span>
+  <span class="kpi-unit">°C</span>
+</div>
         <div class="kpi-change kpi-down">↑ Above optimal range</div>
       </div>
 
@@ -636,8 +657,9 @@
           <span class="kpi-icon">💧</span>
         </div>
         <div class="kpi-value">
-          68 <span class="kpi-unit">%</span>
-        </div>
+  <span id="humidityValue">68</span>
+  <span class="kpi-unit">%</span>
+</div>
         <div class="kpi-change kpi-up">✓ Optimal range</div>
       </div>
 
@@ -831,7 +853,7 @@
           <div class="card-title">Recent Alerts</div>
           <span class="card-action">View all</span>
         </div>
-        <div class="alert-list">
+        <div class="alert-list" id="alertList">
 
           <div class="alert-item alert-danger">
             <span class="alert-icon">🌡️</span>
@@ -929,7 +951,79 @@
     });
 
   </script>
+<!-- ════════════ WEATHER JAVASCRIPT ════════════ -->
+  <script>
 
+    // ── fetch real weather when page loads ──
+   async function loadWeather(city = 'Chennai') {
+  try {
+
+        // call our Flask weather API
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/weather?city=${city}`
+        );
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+
+          const weather = data.weather;
+
+          // ── update weather pill in topbar ──
+          document.getElementById('weatherPill').textContent =
+            `🌤️ ${weather.temperature}°C · ${weather.condition} · ${weather.city}`;
+
+          // ── update KPI cards ──
+          document.getElementById('tempValue').textContent =
+            weather.temperature;
+
+          document.getElementById('humidityValue').textContent =
+            weather.humidity;
+
+          // ── update alerts if any ──
+          if (data.alerts && data.alerts.length > 0) {
+            const alertList = document.getElementById('alertList');
+
+            data.alerts.forEach(alert => {
+
+              const div = document.createElement('div');
+              div.className = `alert-item alert-${alert.type}`;
+              div.innerHTML = `
+                <span class="alert-icon">
+                  ${alert.type === 'danger' ? '🌡️' : '⚠️'}
+                </span>
+                <div class="alert-text">
+                  <div class="alert-title">Weather Alert</div>
+                  <div class="alert-desc">${alert.message}</div>
+                </div>
+                <span class="alert-time">now</span>
+              `;
+
+              // add to top of alert list
+              alertList.prepend(div);
+            });
+          }
+
+        }
+
+      } catch (error) {
+        console.log('Weather API not connected:', error);
+      }
+    }
+
+    // run when page loads
+    loadWeather();
+    function changeCity(city) {
+  if (city.length > 2) {
+    loadWeather(city);
+  }
+}function changeCity(city) {
+  if (city.length > 2) {
+    loadWeather(city);
+  }
+}
+
+  </script>
 </body>
 </html>
 ```
