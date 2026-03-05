@@ -1,2 +1,2 @@
 # GreenPulse-AI
-keerivadaaa makkale
+
