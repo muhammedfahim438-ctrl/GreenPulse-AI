@@ -678,136 +678,79 @@
   <!-- ════════════ JAVASCRIPT ════════════ -->
   <script>
 
-    function predictYield() {
+    async function predictYield() {
 
-      // get all input values
-      const crop       = document.getElementById('crop').value;
-      const temp       = parseFloat(document.getElementById('temp').value);
-      const rain       = parseFloat(document.getElementById('rain').value);
-      const humidity   = parseFloat(document.getElementById('humidity').value);
-      const area       = parseFloat(document.getElementById('area').value);
-      const fertilizer = document.getElementById('fertilizer').value;
-      const season     = document.getElementById('season').value;
+  // get all input values
+  const crop       = document.getElementById('crop').value;
+  const temp       = document.getElementById('temp').value;
+  const rain       = document.getElementById('rain').value;
+  const humidity   = document.getElementById('humidity').value;
+  const area       = document.getElementById('area').value;
+  const fertilizer = document.getElementById('fertilizer').value;
+  const season     = document.getElementById('season').value;
+  const soil       = document.getElementById('soil').value;
 
-      // base yield for each crop type (tons per hectare)
-      const baseYield = {
-        wheat:  3.2,
-        maize:  4.0,
-        rice:   2.5,
-        tomato: 3.8,
-        cotton: 1.8,
-        potato: 5.0
-      };
+  // show loading state on button
+  const btn = document.querySelector('.btn-predict');
+  btn.textContent = '⏳ Analyzing...';
+  btn.disabled = true;
 
-      // start with base yield for selected crop
-      let yld = baseYield[crop] || 3.0;
+  try {
 
-      // adjust yield based on temperature
-      if (temp > 35)      yld -= 0.5;  // too hot  = bad
-      else if (temp < 15) yld -= 0.4;  // too cold = bad
-      else if (temp >= 20 && temp <= 30) yld += 0.3; // ideal range
+    // send data to Flask backend
+    const response = await fetch('http://127.0.0.1:5000/api/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        crop:        crop,
+        temperature: temp,
+        rainfall:    rain,
+        humidity:    humidity,
+        area:        area,
+        fertilizer:  fertilizer,
+        season:      season,
+        soil:        soil
+      })
+    });
 
-      // adjust based on rainfall
-      if (rain >= 600 && rain <= 1200) yld += 0.3;   // ideal rain
-      else if (rain < 300)             yld -= 0.5;   // too dry
-      else if (rain > 2000)            yld -= 0.3;   // too wet
+    // get result from backend
+    const data = await response.json();
 
-      // adjust based on humidity
-      if (humidity >= 50 && humidity <= 80) yld += 0.2; // ideal
-      else if (humidity > 90)               yld -= 0.3; // too humid
+    if (data.status === 'success') {
 
-      // adjust based on fertilizer
-      if      (fertilizer === 'high')   yld += 0.4;
-      else if (fertilizer === 'medium') yld += 0.2;
-      else if (fertilizer === 'none')   yld -= 0.3;
+      // update yield value on page
+      document.getElementById('yieldValue').textContent =
+        data.predicted_yield;
 
-      // adjust based on season
-      if (season === 'rabi') yld += 0.1;
-
-      // add small random variation
-      yld = yld + (Math.random() * 0.3 - 0.15);
-
-      // make sure yield is never below 0.5
-      yld = Math.max(0.5, yld);
-
-      // round to 1 decimal place
-      yld = yld.toFixed(1);
-
-      // calculate total yield for the whole farm
-      const total = (yld * area).toFixed(1);
-
-      // update result values in HTML
-      document.getElementById('yieldValue').textContent = yld;
+      // update total yield text
       document.getElementById('totalYield').textContent =
-        `Total expected: ${total} tons from your ${area} ha farm`;
+        `Total expected: ${data.total_yield} tons
+         from your ${data.area} ha farm`;
 
       // show result box with animation
       const box = document.getElementById('resultBox');
       box.classList.remove('show');
-
-      // small delay so animation replays each time
       setTimeout(() => {
         box.classList.add('show');
       }, 100);
 
     }
 
-  </script>
+  } catch (error) {
+
+    // if backend is not running show error
+    alert('Cannot connect to backend server! Make sure Flask is running on port 5000.');
+
+  }
+
+  // reset button
+  btn.textContent = '🌾 Predict My Yield';
+  btn.disabled = false;
+
+}
+</script>
 
 </body>
 </html>
-```
-
----
-
-## ✅ What This Page Has
-
-- **Sidebar** — same navigation as dashboard
-- **Form** — 8 input fields (crop, soil, area, temperature, rainfall, humidity, season, fertilizer)
-- **Humidity Slider** — drag to change humidity value
-- **Predict Button** — runs the AI calculation
-- **Result Box** — shows predicted yield with animation
-- **Smart Tips** — 3 farming tips shown after prediction
-- **How It Works** — 4 step info section at bottom
-
----
-
-## 🧠 How the Prediction Logic Works
-```
-1. Start with base yield for crop type
-   wheat = 3.2 t/ha
-   maize = 4.0 t/ha
-   rice  = 2.5 t/ha  etc.
-
-2. Add or subtract based on:
-   temperature  → too hot or cold reduces yield
-   rainfall     → ideal 600-1200mm increases yield
-   humidity     → ideal 50-80% increases yield
-   fertilizer   → high fertilizer increases yield
-   season       → rabi season slight boost
-
-3. Add small random variation
-
-4. Show final result
-```
-
----
-
-## 💾 Save to GitHub
-```
-git add .
-git commit -m "Added predict.html yield prediction page"
-git push
-```
-
----
-
-## 🗺 Your Updated Progress
-```
-FRONTEND PAGES
-──────────────────────────────
-✅ index.html     (Landing Page)
-✅ register.html  (Registration)
-✅ dashboard.html (Dashboard)
-✅ predict.html   (Yield Prediction)
-⬜ upload.html    (Disease Detection)  ← next
