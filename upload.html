@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenPulse AI — Disease Detection</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ══════════════════════════════
+       RESET & VARIABLES
+    ══════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark:   #0d3320;
+      --green-mid:    #1a5c38;
+      --green-bright: #2ecc71;
+      --green-soft:   #a8f0c6;
+      --gold:         #f0c040;
+      --red:          #e74c3c;
+      --orange:       #e67e22;
+      --cream:        #f4f7f5;
+      --white:        #ffffff;
+      --text-dark:    #0d1f14;
+      --text-muted:   #6b7c6f;
+      --border:       #ddeae2;
+      --sidebar-w:    240px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--green-dark);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      padding: 2rem 1.5rem;
+      z-index: 50;
+    }
+
+    .sidebar-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--green-bright);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(46,204,113,0.2);
+    }
+    .sidebar-logo span { color: var(--gold); }
+
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.6rem;
+      margin-top: 1.5rem;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.2rem;
+    }
+    .nav-item:hover {
+      background: rgba(46,204,113,0.1);
+      color: var(--white);
+    }
+    .nav-item.active {
+      background: rgba(46,204,113,0.18);
+      color: var(--green-bright);
+    }
+    .nav-item .icon {
+      font-size: 1.1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .farmer-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .farmer-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .farmer-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .farmer-role {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ══════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 2rem 2.5rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .page-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ══════════════════════════════
+       WHITE CARD
+    ══════════════════════════════ */
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ══════════════════════════════
+       TWO COLUMN LAYOUT
+       upload on left, result on right
+    ══════════════════════════════ */
+    .detect-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* ══════════════════════════════
+       IMAGE UPLOAD ZONE
+    ══════════════════════════════ */
+    .upload-zone {
+      border: 2.5px dashed var(--border);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    /* highlight on hover */
+    .upload-zone:hover {
+      border-color: var(--green-bright);
+      background: #f0fdf4;
+    }
+
+    /* highlight when dragging file over */
+    .upload-zone.dragover {
+      border-color: var(--green-bright);
+      background: #e8f8f0;
+    }
+
+    .upload-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .upload-zone h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .upload-zone p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .upload-zone strong {
+      color: var(--green-mid);
+    }
+
+    /* hidden real file input */
+    #fileInput {
+      display: none;
+    }
+
+    /* browse button inside upload zone */
+    .browse-btn {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: var(--green-bright);
+      color: var(--green-dark);
+      padding: 0.65rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .browse-btn:hover { opacity: 0.85; }
+
+    /* image preview after upload */
+    .preview-wrap {
+      display: none;
+      margin-top: 1.2rem;
+    }
+    .preview-wrap.show { display: block; }
+
+    .preview-img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+    }
+
+    .preview-name {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════
+       ANALYZE BUTTON
+    ══════════════════════════════ */
+    .btn-analyze {
+      width: 100%;
+      padding: 1rem;
+      background: var(--green-bright);
+      color: var(--green-dark);
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1.2rem;
+      transition: opacity 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-analyze:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* ══════════════════════════════
+       LOADING SPINNER
+    ══════════════════════════════ */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .loading.show { display: block; }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border);
+      border-top-color: var(--green-bright);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    .loading p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ══════════════════════════════
+       DETECTION RESULT
+    ══════════════════════════════ */
+    .result-panel {
+      display: none;
+    }
+    .result-panel.show {
+      display: block;
+      animation: fadeUp 0.5s ease;
+    }
+
+    /* disease name header */
+    .disease-header {
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .disease-header.danger {
+      background: #fdf2f2;
+      border: 1.5px solid #f5c6c6;
+    }
+    .disease-header.warning {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+    }
+    .disease-header.healthy {
+      background: #e8f8f0;
+      border: 1.5px solid var(--green-bright);
+    }
+
+    .disease-icon { font-size: 2.5rem; }
+
+    .disease-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .disease-header.danger  .disease-name { color: var(--red); }
+    .disease-header.warning .disease-name { color: var(--orange); }
+    .disease-header.healthy .disease-name { color: var(--green-mid); }
+
+    .disease-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* confidence bar */
+    .confidence-wrap {
+      margin-bottom: 1.2rem;
+    }
+
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .confidence-bar {
+      height: 10px;
+      background: var(--border);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      border-radius: 50px;
+      background: var(--green-bright);
+      transition: width 1s ease;
+    }
+
+    /* treatment steps */
+    .treatment-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .treatment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .treatment-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.8rem;
+      background: var(--cream);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    .treatment-item .t-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* try again button */
+    .btn-retry {
+      width: 100%;
+      padding: 0.8rem;
+      background: transparent;
+      color: var(--green-mid);
+      border: 1.5px solid var(--green-bright);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.2s;
+    }
+    .btn-retry:hover {
+      background: #e8f8f0;
+    }
+
+    /* ══════════════════════════════
+       COMMON DISEASES SECTION
+    ══════════════════════════════ */
+    .diseases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .disease-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .disease-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+      border-color: var(--green-bright);
+    }
+
+    .dc-icon  { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .dc-name  {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .dc-desc  {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .dc-severity {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 50px;
+      margin-top: 0.6rem;
+    }
+    .sev-high   { background: #fde8e8; color: #c0392b; }
+    .sev-medium { background: #fff3cd; color: #856404; }
+    .sev-low    { background: #e8f8f0; color: #1a8a4a; }
+
+    /* ══════════════════════════════
+       ANIMATION
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .detect-grid    { grid-template-columns: 1fr; }
+      .diseases-grid  { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; padding: 1.5rem 0.5rem; }
+      .sidebar-logo,
+      .nav-item span,
+      .farmer-name,
+      .farmer-role,
+      .sidebar-section-label { display: none; }
+      .main          { margin-left: 60px; padding: 1rem; }
+      .diseases-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Green<span>Pulse</span> AI</div>
+
+    <div class="sidebar-section-label">Main</div>
+
+    <a class="nav-item" href="dashboard.html">
+      <span class="icon">📊</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a class="nav-item" href="predict.html">
+      <span class="icon">🌾</span>
+      <span>Yield Prediction</span>
+    </a>
+
+    <!-- upload is active on this page -->
+    <a class="nav-item active" href="upload.html">
+      <span class="icon">🔬</span>
+      <span>Disease Detection</span>
+    </a>
+
+    <div class="sidebar-section-label">Monitoring</div>
+
+    <a class="nav-item" href="#">
+      <span class="icon">🌦️</span>
+      <span>Weather</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <span class="icon">🔔</span>
+      <span>Alerts</span>
+    </a>
+
+    <div class="sidebar-section-label">Account</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <span class="icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="farmer-info">
+        <div class="farmer-avatar">👨‍🌾</div>
+        <div>
+          <div class="farmer-name">Ravi Kumar</div>
+          <div class="farmer-role">Wheat Farmer</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN CONTENT ════════════ -->
+  <main class="main">
+
+    <div class="page-title">🔬 Crop Disease Detection</div>
+    <p class="page-sub">
+      Upload a photo of your plant leaf to detect
+      diseases using AI image analysis.
+    </p>
+
+    <!-- UPLOAD + RESULT CARD -->
+    <div class="card">
+      <div class="card-title">📸 Upload Plant Leaf Image</div>
+
+      <div class="detect-grid">
+
+        <!-- LEFT: Upload Zone -->
+        <div>
+
+          <!-- drag and drop area -->
+          <div
+            class="upload-zone"
+            id="uploadZone"
+            onclick="document.getElementById('fileInput').click()"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleDrop(event)"
+          >
+            <div class="upload-icon">🍃</div>
+            <h3>Drop your leaf image here</h3>
+            <p>
+              Drag and drop a photo of your plant leaf,<br>
+              or click to <strong>browse files</strong>
+            </p>
+            <p style="margin-top:0.8rem;font-size:0.78rem">
+              Supports: JPG, PNG, WEBP
+            </p>
+
+            <!-- hidden file input -->
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              onchange="handleFileSelect(event)"
+            />
+
+            <button class="browse-btn">
+              📁 Browse Files
+            </button>
+
+            <!-- image preview -->
+            <div class="preview-wrap" id="previewWrap">
+              <img
+                id="previewImg"
+                class="preview-img"
+                src=""
+                alt="Preview"
+              />
+              <div class="preview-name" id="previewName"></div>
+            </div>
+          </div>
+
+          <!-- analyze button -->
+          <button
+            class="btn-analyze"
+            id="analyzeBtn"
+            onclick="analyzeDisease()"
+            style="display:none"
+          >
+            🔬 Analyze for Disease
+          </button>
+
+        </div>
+        <!-- end left -->
+
+        <!-- RIGHT: Result Panel -->
+        <div>
+
+          <!-- empty state before upload -->
+          <div id="emptyState" style="
+            text-align:center;
+            padding:3rem 1rem;
+            color:var(--text-muted);
+          ">
+            <div style="font-size:4rem;margin-bottom:1rem">🌿</div>
+            <p style="font-size:0.9rem;line-height:1.7">
+              Upload a plant leaf image on the left<br>
+              to see the disease detection results here.
+            </p>
+          </div>
+
+          <!-- loading spinner -->
+          <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p>AI is analyzing your plant image...</p>
+            <p style="font-size:0.78rem;margin-top:0.3rem">
+              This takes about 2 seconds
+            </p>
+          </div>
+
+          <!-- detection result -->
+          <div class="result-panel" id="resultPanel">
+
+            <!-- disease name + severity -->
+            <div class="disease-header" id="diseaseHeader">
+              <div class="disease-icon" id="diseaseIcon">🍂</div>
+              <div>
+                <div class="disease-name" id="diseaseName">
+                  Leaf Blight
+                </div>
+                <div class="disease-sub" id="diseaseSub">
+                  Detected on uploaded leaf image
+                </div>
+              </div>
+            </div>
+
+            <!-- confidence bar -->
+            <div class="confidence-wrap">
+              <div class="confidence-label">
+                <span>AI Confidence</span>
+                <span id="confidenceText">91%</span>
+              </div>
+              <div class="confidence-bar">
+                <div
+                  class="confidence-fill"
+                  id="confidenceFill"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+
+            <!-- treatment steps -->
+            <div class="treatment-title">
+              💊 Recommended Treatment
+            </div>
+            <div class="treatment-list" id="treatmentList">
+            </div>
+
+            <!-- try again -->
+            <button class="btn-retry" onclick="resetPage()">
+              🔄 Analyze Another Image
+            </button>
+
+          </div>
+          <!-- end result-panel -->
+
+        </div>
+        <!-- end right -->
+
+      </div>
+      <!-- end detect-grid -->
+    </div>
+    <!-- end card -->
+
+    <!-- COMMON DISEASES REFERENCE -->
+    <div class="card">
+      <div class="card-title">
+        📚 Common Crop Diseases Reference
+      </div>
+
+      <div class="diseases-grid">
+
+        <div class="disease-card">
+          <div class="dc-icon">🍂</div>
+          <div class="dc-name">Leaf Blight</div>
+          <div class="dc-desc">
+            Brown or yellow patches on leaves.
+            Caused by fungal infection in humid conditions.
+          </div>
+          <span class="dc-severity sev-high">High Severity</span>
+        </div>
+
+        <div class="disease-card">
+          <div class="dc-icon">🟤</div>
+          <div class="dc-name">Rust Disease</div>
+          <div class="dc-desc">
+            Orange or brown powder on leaf surface.
+            Common in wheat and barley crops.
+          </div>
+          <span class="dc-severity sev-high">High Severity</span>
+        </div>
+
+        <div class="disease-card">
+          <div class="dc-icon">⚫</div>
+          <div class="dc-name">Leaf Spot</div>
+          <div class="dc-desc">
+            Small dark spots on leaves.
+            Caused by bacteria or fungus in wet weather.
+          </div>
+          <span class="dc-severity sev-medium">Medium Severity</span>
+        </div>
+
+        <div class="disease-card">
+          <div class="dc-icon">⬜</div>
+          <div class="dc-name">Powdery Mildew</div>
+          <div class="dc-desc">
+            White powder coating on leaves.
+            Thrives in dry warm conditions.
+          </div>
+          <span class="dc-severity sev-medium">Medium Severity</span>
+        </div>
+
+        <div class="disease-card">
+          <div class="dc-icon">🟡</div>
+          <div class="dc-name">Yellow Mosaic</div>
+          <div class="dc-desc">
+            Yellow patches in mosaic pattern.
+            Caused by a virus spread by insects.
+          </div>
+          <span class="dc-severity sev-high">High Severity</span>
+        </div>
+
+        <div class="disease-card">
+          <div class="dc-icon">✅</div>
+          <div class="dc-name">Healthy Leaf</div>
+          <div class="dc-desc">
+            No disease detected. Leaf is green,
+            firm and shows no abnormal patterns.
+          </div>
+          <span class="dc-severity sev-low">No Disease</span>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ════════════ JAVASCRIPT ════════════ -->
+  <script>
+
+    // disease data with treatments
+    // each disease has icon, type, treatments
+    const diseases = [
+      {
+        name:       'Leaf Blight',
+        icon:       '🍂',
+        type:       'danger',
+        confidence: 91,
+        sub:        'Fungal infection detected on leaf',
+        treatments: [
+          {
+            icon: '💊',
+            text: 'Apply Mancozeb or Copper-based fungicide immediately.'
+          },
+          {
+            icon: '✂️',
+            text: 'Remove and burn all infected leaves carefully.'
+          },
+          {
+            icon: '💧',
+            text: 'Avoid overhead irrigation to reduce leaf wetness.'
+          },
+          {
+            icon: '🌬️',
+            text: 'Improve air circulation between plants.'
+          }
+        ]
+      },
+      {
+        name:       'Rust Disease',
+        icon:       '🟤',
+        type:       'danger',
+        confidence: 87,
+        sub:        'Fungal rust pathogen detected',
+        treatments: [
+          {
+            icon: '💊',
+            text: 'Apply Propiconazole or Tebuconazole fungicide.'
+          },
+          {
+            icon: '🌱',
+            text: 'Use rust-resistant crop varieties next season.'
+          },
+          {
+            icon: '📅',
+            text: 'Early sowing helps avoid peak rust season.'
+          },
+          {
+            icon: '🔍',
+            text: 'Monitor neighboring crops for spread.'
+          }
+        ]
+      },
+      {
+        name:       'Powdery Mildew',
+        icon:       '⬜',
+        type:       'warning',
+        confidence: 83,
+        sub:        'Fungal mildew coating detected',
+        treatments: [
+          {
+            icon: '💊',
+            text: 'Spray Sulphur-based fungicide on affected areas.'
+          },
+          {
+            icon: '🌿',
+            text: 'Neem oil spray is an effective organic option.'
+          },
+          {
+            icon: '☀️',
+            text: 'Ensure plants get adequate sunlight daily.'
+          },
+          {
+            icon: '🚿',
+            text: 'Avoid wetting foliage when watering.'
+          }
+        ]
+      },
+      {
+        name:       'Healthy Leaf',
+        icon:       '✅',
+        type:       'healthy',
+        confidence: 96,
+        sub:        'No disease detected — leaf looks healthy',
+        treatments: [
+          {
+            icon: '✅',
+            text: 'Your plant looks healthy! Keep up good practices.'
+          },
+          {
+            icon: '💧',
+            text: 'Continue regular watering and fertilizing schedule.'
+          },
+          {
+            icon: '🔍',
+            text: 'Keep monitoring weekly for early signs of disease.'
+          }
+        ]
+      }
+    ];
+
+    // ─── FILE SELECT via browse button ───
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) showPreview(file);
+    }
+
+    // ─── DRAG OVER ───
+    function handleDragOver(event) {
+      event.preventDefault();
+      document.getElementById('uploadZone').classList.add('dragover');
+    }
+
+    // ─── DRAG LEAVE ───
+    function handleDragLeave(event) {
+      document.getElementById('uploadZone').classList.remove('dragover');
+    }
+
+    // ─── DROP FILE ───
+    function handleDrop(event) {
+      event.preventDefault();
+      document.getElementById('uploadZone').classList.remove('dragover');
+      const file = event.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        showPreview(file);
+      }
+    }
+
+    // ─── SHOW IMAGE PREVIEW ───
+    function showPreview(file) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        // show preview image
+        document.getElementById('previewImg').src = e.target.result;
+        document.getElementById('previewName').textContent = file.name;
+        document.getElementById('previewWrap').classList.add('show');
+
+        // show analyze button
+        document.getElementById('analyzeBtn').style.display = 'flex';
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // ─── ANALYZE BUTTON CLICKED ───
+    function analyzeDisease() {
+
+      // hide empty state
+      document.getElementById('emptyState').style.display = 'none';
+
+      // hide result panel
+      document.getElementById('resultPanel').classList.remove('show');
+
+      // show loading spinner
+      document.getElementById('loadingState').classList.add('show');
+
+      // simulate AI processing time (2 seconds)
+      setTimeout(() => {
+
+        // hide loading
+        document.getElementById('loadingState').classList.remove('show');
+
+        // pick a random disease from the list
+        const disease = diseases[
+          Math.floor(Math.random() * diseases.length)
+        ];
+
+        // update disease header
+        const header = document.getElementById('diseaseHeader');
+        header.className = 'disease-header ' + disease.type;
+
+        document.getElementById('diseaseIcon').textContent  = disease.icon;
+        document.getElementById('diseaseName').textContent  = disease.name;
+        document.getElementById('diseaseSub').textContent   = disease.sub;
+
+        // update confidence bar
+        document.getElementById('confidenceText').textContent =
+          disease.confidence + '%';
+
+        // animate confidence bar fill
+        setTimeout(() => {
+          document.getElementById('confidenceFill').style.width =
+            disease.confidence + '%';
+        }, 100);
+
+        // build treatment list
+        const list = document.getElementById('treatmentList');
+        list.innerHTML = '';
+
+        disease.treatments.forEach(t => {
+          const item = document.createElement('div');
+          item.className = 'treatment-item';
+          item.innerHTML = `
+            <span class="t-icon">${t.icon}</span>
+            <span>${t.text}</span>
+          `;
+          list.appendChild(item);
+        });
+
+        // show result panel
+        document.getElementById('resultPanel').classList.add('show');
+
+      }, 2000);
+      // end setTimeout
+    }
+
+    // ─── RESET PAGE ───
+    function resetPage() {
+
+      // reset file input
+      document.getElementById('fileInput').value = '';
+
+      // hide preview
+      document.getElementById('previewWrap').classList.remove('show');
+      document.getElementById('previewImg').src = '';
+
+      // hide analyze button
+      document.getElementById('analyzeBtn').style.display = 'none';
+
+      // hide result panel
+      document.getElementById('resultPanel').classList.remove('show');
+
+      // reset confidence bar
+      document.getElementById('confidenceFill').style.width = '0%';
+
+      // show empty state again
+      document.getElementById('emptyState').style.display = 'block';
+    }
+
+  </script>
+
+</body>
+</html>
+```
+
+---
+
+## ✅ What This Page Has
+
+- **Drag and Drop** — drag any image onto the upload zone
+- **Browse Files** — click to pick image from your computer
+- **Image Preview** — shows your uploaded image instantly
+- **Loading Spinner** — 2 second AI animation while analyzing
+- **Disease Result** — shows disease name, confidence bar, treatments
+- **4 Diseases** — Leaf Blight, Rust, Powdery Mildew, Healthy Leaf
+- **Reset Button** — analyze another image
+- **Disease Reference** — 6 common disease cards at bottom
+
+---
+
+## 💾 Save to GitHub
+```
+git add .
+git commit -m "Added upload.html disease detection page"
+git push
+```
+
+---
+
+## 🎉 Your Frontend is Now 100% Complete!
+```
+FRONTEND PAGES
+──────────────────────────────
+✅ index.html     (Landing Page)
+✅ register.html  (Registration)
+✅ dashboard.html (Dashboard)
+✅ predict.html   (Yield Prediction)
+✅ upload.html    (Disease Detection)
+
+BACKEND + AI  ← next phase
+──────────────────────────────
+⬜ Python + Flask setup
+⬜ Connect frontend to backend
+⬜ AI models
+⬜ Weather API
+⬜ Email alerts
