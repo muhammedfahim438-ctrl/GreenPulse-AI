@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenPulse AI — Register</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ══════════════════════════════
+       RESET & VARIABLES
+    ══════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark:   #0d3320;
+      --green-mid:    #1a5c38;
+      --green-bright: #2ecc71;
+      --green-soft:   #a8f0c6;
+      --gold:         #f0c040;
+      --cream:        #f4f7f5;
+      --white:        #ffffff;
+      --text-dark:    #0d1f14;
+      --text-muted:   #6b7c6f;
+      --border:       #ddeae2;
+      --red:          #e74c3c;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* ══════════════════════════════
+       MAIN WRAPPER
+       left side = green panel
+       right side = form
+    ══════════════════════════════ */
+    .auth-wrap {
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+
+    /* ══════════════════════════════
+       LEFT GREEN PANEL
+    ══════════════════════════════ */
+    .auth-left {
+      flex: 1;
+      background: linear-gradient(
+        160deg, var(--green-dark), var(--green-mid)
+      );
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .auth-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--green-bright);
+    }
+    .auth-logo span { color: var(--gold); }
+
+    .auth-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--white);
+      line-height: 1.2;
+      margin: 2rem 0 1rem;
+    }
+
+    .auth-left p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* checklist of features */
+    .auth-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    .auth-feat {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* green circle checkmark */
+    .auth-feat::before {
+      content: '✓';
+      background: var(--green-bright);
+      color: var(--green-dark);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .left-emoji {
+      font-size: 5rem;
+      margin-top: 2rem;
+    }
+
+    /* ══════════════════════════════
+       RIGHT FORM PANEL
+    ══════════════════════════════ */
+    .auth-right {
+      flex: 1;
+      padding: 3rem 2.5rem;
+      overflow-y: auto;
+    }
+
+    .auth-right h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .auth-right > p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ══════════════════════════════
+       FORM ELEMENTS
+    ══════════════════════════════ */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    /* two inputs side by side */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--green-bright);
+    }
+
+    /* show red border if input is invalid */
+    input.error {
+      border-color: var(--red);
+    }
+
+    .error-msg {
+      font-size: 0.75rem;
+      color: var(--red);
+      display: none;
+    }
+    .error-msg.show {
+      display: block;
+    }
+
+    /* ══════════════════════════════
+       REGISTER BUTTON
+    ══════════════════════════════ */
+    .btn-register {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--green-bright);
+      color: var(--green-dark);
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-register:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* already have account link */
+    .login-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .login-link a {
+      color: var(--green-mid);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* ══════════════════════════════
+       SUCCESS MESSAGE
+       shown after form is submitted
+    ══════════════════════════════ */
+    .success-box {
+      display: none;
+      background: #e8f8f0;
+      border: 1px solid var(--green-bright);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .success-box.show {
+      display: block;
+      animation: fadeUp 0.4s ease;
+    }
+    .success-box .icon {
+      font-size: 3rem;
+      margin-bottom: 0.8rem;
+    }
+    .success-box h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+    .success-box p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════
+       ANIMATION
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE - MOBILE
+    ══════════════════════════════ */
+    @media (max-width: 700px) {
+      .auth-wrap  { flex-direction: column; }
+      .auth-left  { padding: 2rem; }
+      .auth-right { padding: 2rem; }
+      .form-row   { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrap">
+
+    <!-- ════════ LEFT PANEL ════════ -->
+    <div class="auth-left">
+      <div>
+        <div class="auth-logo">Green<span>Pulse</span> AI</div>
+
+        <h2>Start your smart farming journey</h2>
+
+        <p>
+          Join thousands of farmers using AI to boost yields,
+          detect disease early, and farm smarter.
+        </p>
+
+        <div class="auth-features">
+          <div class="auth-feat">AI crop yield prediction</div>
+          <div class="auth-feat">Plant disease detection</div>
+          <div class="auth-feat">Real-time weather alerts</div>
+          <div class="auth-feat">Smart farming dashboard</div>
+          <div class="auth-feat">Free to get started</div>
+        </div>
+      </div>
+
+      <div class="left-emoji">🌿</div>
+    </div>
+
+    <!-- ════════ RIGHT FORM PANEL ════════ -->
+    <div class="auth-right">
+      <h3>Create your account</h3>
+      <p>Fill in your details to get started with GreenPulse AI.</p>
+
+      <!-- Registration Form -->
+      <div id="regForm">
+
+        <!-- First Name + Last Name -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              id="fname"
+              placeholder="Ravi"
+            />
+            <span class="error-msg" id="fnameErr">
+              Please enter your first name
+            </span>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              id="lname"
+              placeholder="Kumar"
+            />
+            <span class="error-msg" id="lnameErr">
+              Please enter your last name
+            </span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="ravi@example.com"
+          />
+          <span class="error-msg" id="emailErr">
+            Please enter a valid email
+          </span>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="+91 98765 43210"
+          />
+        </div>
+
+        <!-- Location + Farm Size -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location / Village</label>
+            <input
+              type="text"
+              id="location"
+              placeholder="Pune, Maharashtra"
+            />
+          </div>
+          <div class="form-group">
+            <label>Farm Size (Hectares)</label>
+            <input
+              type="number"
+              id="farmsize"
+              placeholder="5"
+              min="0.1"
+            />
+          </div>
+        </div>
+
+        <!-- Primary Crop -->
+        <div class="form-group">
+          <label>Primary Crop</label>
+          <select id="primarycrop">
+            <option value="">-- Select your crop --</option>
+            <option>🌾 Wheat</option>
+            <option>🌽 Maize</option>
+            <option>🍚 Rice</option>
+            <option>🍅 Tomato</option>
+            <option>🌿 Cotton</option>
+            <option>🥔 Potato</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Create a strong password"
+          />
+          <span class="error-msg" id="passErr">
+            Password must be at least 6 characters
+          </span>
+        </div>
+
+        <!-- Register Button -->
+        <button class="btn-register" onclick="register()">
+          🌱 Create Account
+        </button>
+
+        <div class="login-link">
+          Already have an account?
+          <a href="dashboard.html">Sign in →</a>
+        </div>
+
+      </div>
+      <!-- end regForm -->
+
+      <!-- Success Message (hidden until form submitted) -->
+      <div class="success-box" id="successBox">
+        <div class="icon">🎉</div>
+        <h4>Welcome to GreenPulse AI!</h4>
+        <p>
+          Your farmer account has been created successfully.<br>
+          Redirecting to your dashboard...
+        </p>
+      </div>
+
+    </div>
+    <!-- end auth-right -->
+
+  </div>
+  <!-- end auth-wrap -->
+
+  <!-- ════════════ JAVASCRIPT ════════════ -->
+  <script>
+
+    function register() {
+
+      // get all field values
+      const fname    = document.getElementById('fname').value.trim();
+      const lname    = document.getElementById('lname').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // reset all errors first
+      clearErrors();
+
+      // track if form is valid
+      let valid = true;
+
+      // check first name
+      if (!fname) {
+        showError('fname', 'fnameErr');
+        valid = false;
+      }
+
+      // check last name
+      if (!lname) {
+        showError('lname', 'lnameErr');
+        valid = false;
+      }
+
+      // check email has @ symbol
+      if (!email || !email.includes('@')) {
+        showError('email', 'emailErr');
+        valid = false;
+      }
+
+      // check password length
+      if (password.length < 6) {
+        showError('password', 'passErr');
+        valid = false;
+      }
+
+      // if all fields are valid show success
+      if (valid) {
+        document.getElementById('regForm').style.display = 'none';
+        const box = document.getElementById('successBox');
+        box.classList.add('show');
+
+        // redirect to dashboard after 2.5 seconds
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 2500);
+      }
+    }
+
+    // show red border + error message
+    function showError(inputId, errId) {
+      document.getElementById(inputId).classList.add('error');
+      document.getElementById(errId).classList.add('show');
+    }
+
+    // clear all red borders + error messages
+    function clearErrors() {
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(i => i.classList.remove('error'));
+      const errors = document.querySelectorAll('.error-msg');
+      errors.forEach(e => e.classList.remove('show'));
+    }
+
+  </script>
+
+</body>
+</html>
+```
+
+---
+
+## ✅ What This Page Has
+
+- **Left green panel** — logo, welcome message, feature checklist
+- **Right form panel** — all input fields for farmer registration
+- **Form validation** — shows red error if fields are empty or wrong
+- **Success message** — shows after successful registration
+- **Auto redirect** — goes to `dashboard.html` after 2.5 seconds
+
+---
+
+## ▶ How to Test It
+
+1. Save the file
+2. Open with Live Server
+3. Try clicking **Create Account** without filling anything — you will see red error messages ✅
+4. Fill all fields correctly and click **Create Account** — success message appears ✅
+
+---
+
+## 💾 Save to GitHub
+```
+git add .
+git commit -m "Added register.html registration page"
+git push
