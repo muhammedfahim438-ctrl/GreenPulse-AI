@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenPulse AI — Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+
+    /* ══════════════════════════════
+       RESET & VARIABLES
+    ══════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark:   #0d3320;
+      --green-mid:    #1a5c38;
+      --green-bright: #2ecc71;
+      --green-soft:   #a8f0c6;
+      --gold:         #f0c040;
+      --red:          #e74c3c;
+      --blue:         #3498db;
+      --cream:        #f4f7f5;
+      --white:        #ffffff;
+      --text-dark:    #0d1f14;
+      --text-muted:   #6b7c6f;
+      --border:       #ddeae2;
+      --sidebar-w:    240px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--green-dark);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      padding: 2rem 1.5rem;
+      z-index: 50;
+    }
+
+    .sidebar-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--green-bright);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(46,204,113,0.2);
+    }
+    .sidebar-logo span { color: var(--gold); }
+
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.6rem;
+      margin-top: 1.5rem;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.2rem;
+    }
+    .nav-item:hover {
+      background: rgba(46,204,113,0.1);
+      color: var(--white);
+    }
+    .nav-item.active {
+      background: rgba(46,204,113,0.18);
+      color: var(--green-bright);
+    }
+    .nav-item .icon {
+      font-size: 1.1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    /* farmer info at bottom of sidebar */
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .farmer-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .farmer-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .farmer-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .farmer-role {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ══════════════════════════════
+       MAIN CONTENT AREA
+    ══════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 2rem 2.5rem;
+    }
+
+    /* ══════════════════════════════
+       TOP BAR
+    ══════════════════════════════ */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .topbar h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* weather info pill */
+    .weather-pill {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* notification bell button */
+    .alert-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* red dot on bell */
+    .alert-dot {
+      position: absolute;
+      top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 2px solid var(--white);
+    }
+
+    /* ══════════════════════════════
+       KPI CARDS ROW
+       (4 stat cards at top)
+    ══════════════════════════════ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    }
+
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .kpi-icon { font-size: 1.3rem; }
+
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+    }
+    .kpi-unit {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-left: 0.2rem;
+    }
+
+    /* colored badge below value */
+    .kpi-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      margin-top: 0.5rem;
+    }
+    .kpi-up   { background: #e8f8f0; color: #1a8a4a; }
+    .kpi-down { background: #fde8e8; color: #c0392b; }
+    .kpi-warn { background: #fff8e0; color: #b8860b; }
+
+    /* ══════════════════════════════
+       MIDDLE ROW
+       chart on left, risk on right
+    ══════════════════════════════ */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* white card container */
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .card-action {
+      font-size: 0.8rem;
+      color: var(--green-mid);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ══════════════════════════════
+       CROP RISK SCORE RING
+    ══════════════════════════════ */
+    .risk-ring-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .risk-ring {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+    }
+
+    /* rotate so gap starts at top */
+    .risk-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .risk-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .risk-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e67e22;
+    }
+    .risk-lbl {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* risk factor rows */
+    .risk-factors { flex: 1; }
+
+    .risk-factor {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .risk-factor:last-child { border-bottom: none; }
+
+    .rf-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.7rem;
+      border-radius: 50px;
+    }
+    .rf-high { background: #fde8e8; color: #c0392b; }
+    .rf-med  { background: #fff3cd; color: #856404; }
+    .rf-low  { background: #e8f8f0; color: #1a8a4a; }
+
+    /* ══════════════════════════════
+       WEATHER FORECAST ROW
+    ══════════════════════════════ */
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.8rem;
+    }
+
+    .w-card {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    /* highlight today */
+    .w-card.today {
+      background: #e8f8f0;
+      border-color: var(--green-bright);
+    }
+
+    .w-day  { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem; }
+    .w-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+    .w-temp { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; }
+    .w-desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* ══════════════════════════════
+       BOTTOM ROW
+       table on left, alerts on right
+    ══════════════════════════════ */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* ══════════════════════════════
+       PREDICTIONS TABLE
+    ══════════════════════════════ */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 0.5rem 0.8rem;
+    }
+
+    td {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .badge-green  { background: #e8f8f0; color: #1a8a4a; }
+    .badge-yellow { background: #fff8e0; color: #b8860b; }
+    .badge-red    { background: #fde8e8; color: #c0392b; }
+
+    /* ══════════════════════════════
+       ALERTS LIST
+    ══════════════════════════════ */
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+
+    .alert-danger  { background: #fdf2f2; border: 1px solid #f5c6c6; }
+    .alert-warning { background: #fffbeb; border: 1px solid #fde68a; }
+    .alert-info    { background: #f0f7ff; border: 1px solid #bfdbfe; }
+
+    .alert-icon  { font-size: 1.1rem; margin-top: 1px; }
+    .alert-text  { flex: 1; }
+
+    .alert-title {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.15rem;
+    }
+    .alert-desc {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    .alert-time {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE - TABLET / MOBILE
+    ══════════════════════════════ */
+    @media (max-width: 1200px) {
+      .kpi-grid     { grid-template-columns: repeat(2, 1fr); }
+      .content-grid { grid-template-columns: 1fr; }
+      .bottom-grid  { grid-template-columns: 1fr; }
+      .weather-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; padding: 1.5rem 0.5rem; }
+
+      /* hide text labels on small screens */
+      .sidebar-logo,
+      .nav-item span,
+      .farmer-name,
+      .farmer-role,
+      .sidebar-section-label { display: none; }
+
+      .main   { margin-left: 60px; padding: 1rem; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Green<span>Pulse</span> AI</div>
+
+    <div class="sidebar-section-label">Main</div>
+
+    <a class="nav-item active" href="dashboard.html">
+      <span class="icon">📊</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a class="nav-item" href="predict.html">
+      <span class="icon">🌾</span>
+      <span>Yield Prediction</span>
+    </a>
+
+    <a class="nav-item" href="upload.html">
+      <span class="icon">🔬</span>
+      <span>Disease Detection</span>
+    </a>
+
+    <div class="sidebar-section-label">Monitoring</div>
+
+    <a class="nav-item" href="#">
+      <span class="icon">🌦️</span>
+      <span>Weather</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <span class="icon">🔔</span>
+      <span>Alerts</span>
+    </a>
+
+    <div class="sidebar-section-label">Account</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <span class="icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+
+    <!-- farmer info at bottom -->
+    <div class="sidebar-footer">
+      <div class="farmer-info">
+        <div class="farmer-avatar">👨‍🌾</div>
+        <div>
+          <div class="farmer-name">Ravi Kumar</div>
+          <div class="farmer-role">Wheat Farmer</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN CONTENT ════════════ -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div>
+        <h1>Farm Dashboard</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-top:0.2rem">
+          Welcome back, Ravi! Here's your farm overview.
+        </p>
+      </div>
+      <div class="topbar-right">
+        <div class="weather-pill">🌤️ 34°C · Sunny · Pune</div>
+        <div class="alert-btn">
+          🔔
+          <div class="alert-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Predicted Yield</span>
+          <span class="kpi-icon">🌾</span>
+        </div>
+        <div class="kpi-value">
+          3.6 <span class="kpi-unit">t/ha</span>
+        </div>
+        <div class="kpi-change kpi-up">↑ 12% vs last season</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Crop Risk Score</span>
+          <span class="kpi-icon">⚠️</span>
+        </div>
+        <div class="kpi-value">
+          72 <span class="kpi-unit">/ 100</span>
+        </div>
+        <div class="kpi-change kpi-warn">⚠ Moderate Risk</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Temperature</span>
+          <span class="kpi-icon">🌡️</span>
+        </div>
+        <div class="kpi-value">
+          34 <span class="kpi-unit">°C</span>
+        </div>
+        <div class="kpi-change kpi-down">↑ Above optimal range</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Soil Humidity</span>
+          <span class="kpi-icon">💧</span>
+        </div>
+        <div class="kpi-value">
+          68 <span class="kpi-unit">%</span>
+        </div>
+        <div class="kpi-change kpi-up">✓ Optimal range</div>
+      </div>
+
+    </div>
+    <!-- end kpi-grid -->
+
+    <!-- MIDDLE ROW: Chart + Risk Score -->
+    <div class="content-grid">
+
+      <!-- Yield Line Chart -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Yield Prediction — Monthly</div>
+          <a class="card-action" href="predict.html">Run new →</a>
+        </div>
+        <canvas id="yieldChart" height="220"></canvas>
+      </div>
+
+      <!-- Crop Risk Score -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Crop Risk Analysis</div>
+          <span style="font-size:0.8rem;color:var(--text-muted)">
+            Updated now
+          </span>
+        </div>
+
+        <div class="risk-ring-wrap">
+
+          <!-- circular ring showing 72% -->
+          <div class="risk-ring">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <!-- grey background circle -->
+              <circle
+                cx="70" cy="70" r="55"
+                fill="none"
+                stroke="#eee"
+                stroke-width="12"
+              />
+              <!-- orange progress arc -->
+              <!-- stroke-dasharray = full circumference = 2*pi*55 = 345.4 -->
+              <!-- stroke-dashoffset = 345.4 * (1 - 0.72) = 96.7 -->
+              <circle
+                cx="70" cy="70" r="55"
+                fill="none"
+                stroke="#e67e22"
+                stroke-width="12"
+                stroke-dasharray="345.4"
+                stroke-dashoffset="96.7"
+                stroke-linecap="round"
+              />
+            </svg>
+            <div class="risk-ring-text">
+              <div class="risk-pct">72%</div>
+              <div class="risk-lbl">RISK INDEX</div>
+            </div>
+          </div>
+
+          <!-- risk factor list -->
+          <div class="risk-factors">
+            <div class="risk-factor">
+              <span>🌡 High Temperature</span>
+              <span class="rf-badge rf-high">High</span>
+            </div>
+            <div class="risk-factor">
+              <span>💧 Humidity Level</span>
+              <span class="rf-badge rf-high">High</span>
+            </div>
+            <div class="risk-factor">
+              <span>🌧 Rainfall</span>
+              <span class="rf-badge rf-med">Medium</span>
+            </div>
+            <div class="risk-factor">
+              <span>🦠 Disease Risk</span>
+              <span class="rf-badge rf-low">Low</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- end content-grid -->
+
+    <!-- WEATHER FORECAST -->
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="card-header">
+        <div class="card-title">7-Day Weather Forecast</div>
+        <span style="font-size:0.8rem;color:var(--text-muted)">
+          Pune, Maharashtra
+        </span>
+      </div>
+      <div class="weather-grid">
+        <div class="w-card today">
+          <div class="w-day">TODAY</div>
+          <div class="w-icon">🌤️</div>
+          <div class="w-temp">34°C</div>
+          <div class="w-desc">Partly Cloudy</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">WED</div>
+          <div class="w-icon">⛅</div>
+          <div class="w-temp">31°C</div>
+          <div class="w-desc">Cloudy</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">THU</div>
+          <div class="w-icon">🌧️</div>
+          <div class="w-temp">28°C</div>
+          <div class="w-desc">Rain</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">FRI</div>
+          <div class="w-icon">⛈️</div>
+          <div class="w-temp">26°C</div>
+          <div class="w-desc">Thunderstorm</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">SAT</div>
+          <div class="w-icon">🌦️</div>
+          <div class="w-temp">27°C</div>
+          <div class="w-desc">Light Rain</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">SUN</div>
+          <div class="w-icon">🌤️</div>
+          <div class="w-temp">30°C</div>
+          <div class="w-desc">Partly Cloudy</div>
+        </div>
+        <div class="w-card">
+          <div class="w-day">MON</div>
+          <div class="w-icon">☀️</div>
+          <div class="w-temp">33°C</div>
+          <div class="w-desc">Sunny</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW: Table + Alerts -->
+    <div class="bottom-grid">
+
+      <!-- Recent Predictions Table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Predictions</div>
+          <a class="card-action" href="predict.html">
+            New prediction →
+          </a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Crop</th>
+              <th>Yield</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🌾 Wheat</td>
+              <td><strong>3.6 t/ha</strong></td>
+              <td>Mar 4, 2025</td>
+              <td><span class="badge badge-green">Good</span></td>
+            </tr>
+            <tr>
+              <td>🌽 Maize</td>
+              <td><strong>4.1 t/ha</strong></td>
+              <td>Feb 20, 2025</td>
+              <td><span class="badge badge-green">Excellent</span></td>
+            </tr>
+            <tr>
+              <td>🍅 Tomato</td>
+              <td><strong>2.8 t/ha</strong></td>
+              <td>Feb 10, 2025</td>
+              <td><span class="badge badge-yellow">Average</span></td>
+            </tr>
+            <tr>
+              <td>🌾 Rice</td>
+              <td><strong>1.9 t/ha</strong></td>
+              <td>Jan 28, 2025</td>
+              <td><span class="badge badge-red">Low</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Alerts List -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Alerts</div>
+          <span class="card-action">View all</span>
+        </div>
+        <div class="alert-list">
+
+          <div class="alert-item alert-danger">
+            <span class="alert-icon">🌡️</span>
+            <div class="alert-text">
+              <div class="alert-title">High Temperature Alert</div>
+              <div class="alert-desc">
+                Temperature reached 34°C.
+                Consider additional irrigation.
+              </div>
+            </div>
+            <span class="alert-time">2h ago</span>
+          </div>
+
+          <div class="alert-item alert-warning">
+            <span class="alert-icon">⛈️</span>
+            <div class="alert-text">
+              <div class="alert-title">Heavy Rain Expected</div>
+              <div class="alert-desc">
+                Thursday forecast: 82mm rainfall.
+                Prepare drainage.
+              </div>
+            </div>
+            <span class="alert-time">5h ago</span>
+          </div>
+
+          <div class="alert-item alert-info">
+            <span class="alert-icon">🌿</span>
+            <div class="alert-text">
+              <div class="alert-title">Yield Prediction Ready</div>
+              <div class="alert-desc">
+                New wheat yield prediction:
+                3.6 t/ha — above average.
+              </div>
+            </div>
+            <span class="alert-time">1d ago</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- end bottom-grid -->
+
+  </main>
+
+  <!-- ════════════ JAVASCRIPT ════════════ -->
+  <script>
+
+    // Line chart for yield prediction
+    const ctx = document.getElementById('yieldChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Predicted Yield (t/ha)',
+          data: [2.8, 3.0, 3.2, 3.1, 3.4, 3.6, 3.7, 3.5, 3.8],
+          borderColor: '#2ecc71',
+          backgroundColor: 'rgba(46,204,113,0.08)',
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#2ecc71',
+          pointRadius: 4,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0d3320',
+            titleColor: '#a8f0c6',
+            bodyColor: '#ffffff',
+            padding: 12,
+            cornerRadius: 10
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#6b7c6f', font: { size: 11 } }
+          },
+          y: {
+            grid: { color: '#f0f0f0' },
+            ticks: { color: '#6b7c6f', font: { size: 11 } },
+            min: 2,
+            max: 4.5
+          }
+        }
+      }
+    });
+
+  </script>
+
+</body>
+</html>
+```
+
+---
+
+## ✅ What This Page Has
+
+- **Sidebar** — navigation with all pages linked
+- **KPI Cards** — Predicted Yield, Risk Score, Temperature, Humidity
+- **Yield Chart** — line graph using Chart.js
+- **Crop Risk Ring** — circular progress ring showing 72% risk
+- **7-Day Weather** — forecast cards for each day
+- **Predictions Table** — history of past predictions
+- **Alerts Panel** — danger, warning and info alerts
+
+---
+
+## 💾 Save to GitHub
+```
+git add .
+git commit -m "Added dashboard.html farmer dashboard"
+git push
