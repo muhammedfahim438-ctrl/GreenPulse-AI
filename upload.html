@@ -970,90 +970,82 @@
     }
 
     // ─── ANALYZE BUTTON CLICKED ───
-    function analyzeDisease() {
+    async function analyzeDisease() {
 
-      // hide empty state
-      document.getElementById('emptyState').style.display = 'none';
+  // get file from input
+  const fileInput = document.getElementById('fileInput');
+  const file      = fileInput.files[0];
 
-      // hide result panel
-      document.getElementById('resultPanel').classList.remove('show');
+  // check if file is selected
+  if (!file) {
+    alert('Please select an image first!');
+    return;
+  }
 
-      // show loading spinner
-      document.getElementById('loadingState').classList.add('show');
+  // show loading
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('resultPanel').style.display  = 'none';
 
-      // simulate AI processing time (2 seconds)
-      setTimeout(() => {
+  try {
 
-        // hide loading
-        document.getElementById('loadingState').classList.remove('show');
+    // create form data and append image
+    const formData = new FormData();
+    formData.append('image', file, file.name);
 
-        // pick a random disease from the list
-        const disease = diseases[
-          Math.floor(Math.random() * diseases.length)
-        ];
+    // send to Flask
+    const response = await fetch('http://127.0.0.1:5000/api/disease', {
+      method: 'POST',
+      body:   formData
+    });
 
-        // update disease header
-        const header = document.getElementById('diseaseHeader');
-        header.className = 'disease-header ' + disease.type;
+    const data = await response.json();
 
-        document.getElementById('diseaseIcon').textContent  = disease.icon;
-        document.getElementById('diseaseName').textContent  = disease.name;
-        document.getElementById('diseaseSub').textContent   = disease.sub;
+    // hide loading
+    document.getElementById('loadingState').style.display = 'none';
 
-        // update confidence bar
-        document.getElementById('confidenceText').textContent =
-          disease.confidence + '%';
+    if (data.status === 'success') {
 
-        // animate confidence bar fill
-        setTimeout(() => {
-          document.getElementById('confidenceFill').style.width =
-            disease.confidence + '%';
-        }, 100);
+      const result = data.result;
 
-        // build treatment list
-        const list = document.getElementById('treatmentList');
-        list.innerHTML = '';
+      // update disease icon and name
+      document.getElementById('diseaseIcon').textContent =
+        result.icon;
 
-        disease.treatments.forEach(t => {
-          const item = document.createElement('div');
-          item.className = 'treatment-item';
-          item.innerHTML = `
-            <span class="t-icon">${t.icon}</span>
-            <span>${t.text}</span>
-          `;
-          list.appendChild(item);
+      document.getElementById('diseaseName').textContent =
+        result.disease;
+
+      // update confidence bar
+      document.getElementById('confidenceFill').style.width =
+        result.confidence + '%';
+
+      document.getElementById('confidenceText').textContent =
+        result.confidence + '%';
+
+      // update treatments
+      const treatmentList = document.getElementById('treatmentList');
+      if (treatmentList) {
+        treatmentList.innerHTML = '';
+        result.treatments.forEach(treatment => {
+          const li       = document.createElement('li');
+          li.textContent = treatment;
+          treatmentList.appendChild(li);
         });
+      }
 
-        // show result panel
-        document.getElementById('resultPanel').classList.add('show');
+      // show results
+      document.getElementById('resultPanel').style.display = 'block';
 
-      }, 2000);
-      // end setTimeout
+    } else {
+      alert('Error: ' + data.message);
     }
 
-    // ─── RESET PAGE ───
-    function resetPage() {
+  } catch (error) {
+    console.log('Error:', error);
+    document.getElementById('loadingState').style.display = 'none';
+    alert('Cannot connect to backend! Make sure Flask is running.');
+  }
 
-      // reset file input
-      document.getElementById('fileInput').value = '';
-
-      // hide preview
-      document.getElementById('previewWrap').classList.remove('show');
-      document.getElementById('previewImg').src = '';
-
-      // hide analyze button
-      document.getElementById('analyzeBtn').style.display = 'none';
-
-      // hide result panel
-      document.getElementById('resultPanel').classList.remove('show');
-
-      // reset confidence bar
-      document.getElementById('confidenceFill').style.width = '0%';
-
-      // show empty state again
-      document.getElementById('emptyState').style.display = 'block';
-    }
-
+}
   </script>
 
 </body>
