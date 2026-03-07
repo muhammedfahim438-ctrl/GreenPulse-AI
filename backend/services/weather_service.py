@@ -10,27 +10,25 @@ from dotenv import load_dotenv
 # load API key from .env file
 load_dotenv()
 
-API_KEY = os.getenv('WEATHER_API_KEY')
+API_KEY  = os.getenv('WEATHER_API_KEY')
 BASE_URL = 'http://api.openweathermap.org/data/2.5'
+
 
 def get_current_weather(city):
     try:
-        # call OpenWeatherMap API
-        url = f'{BASE_URL}/weather'
+        url    = f'{BASE_URL}/weather'
         params = {
             'q':     city,
             'appid': API_KEY,
-            'units': 'metric'  # celsius
+            'units': 'metric'
         }
 
         response = requests.get(url, params=params)
         data     = response.json()
 
-        # check if city was found
         if data.get('cod') != 200:
             return None
 
-        # extract weather details
         weather = {
             'city':        data['name'],
             'country':     data['sys']['country'],
@@ -52,13 +50,12 @@ def get_current_weather(city):
 
 def get_forecast(city):
     try:
-        # call 5 day forecast API
-        url = f'{BASE_URL}/forecast'
+        url    = f'{BASE_URL}/forecast'
         params = {
             'q':     city,
             'appid': API_KEY,
             'units': 'metric',
-            'cnt':   7   # 7 data points
+            'cnt':   7
         }
 
         response = requests.get(url, params=params)
@@ -85,7 +82,6 @@ def get_forecast(city):
 
 
 def check_alerts(weather):
-    # check weather conditions and generate alerts
     alerts = []
 
     if weather['temperature'] > 35:

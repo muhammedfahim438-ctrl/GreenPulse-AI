@@ -8,30 +8,25 @@ from services.weather_service import (
     get_forecast,
     check_alerts
 )
+from services.email_service import send_weather_alert
 
 weather_bp = Blueprint('weather', __name__)
+
 
 # ── get current weather ──
 @weather_bp.route('/api/weather', methods=['GET'])
 def get_weather():
 
-    # get city from request
-    city = request.args.get('city', 'Pune')
-
-    # get weather from OpenWeatherMap
+    city    = request.args.get('city', 'Chennai')
     weather = get_current_weather(city)
 
-    # if city not found
     if not weather:
         return jsonify({
             'status':  'error',
             'message': f'City "{city}" not found'
         }), 404
 
-    # get alerts
-    alerts = check_alerts(weather)
-
-    # get forecast
+    alerts   = check_alerts(weather)
     forecast = get_forecast(city)
 
     return jsonify({
@@ -51,7 +46,7 @@ def search_weather():
     if not city:
         return jsonify({
             'status':  'error',
-            'message': 'Please provide a city name'
+            'message': 'Please provide city name'
         }), 400
 
     weather = get_current_weather(city)
@@ -66,3 +61,38 @@ def search_weather():
         'status':  'success',
         'weather': weather
     })
+
+
+# ── send weather alert email ──
+@weather_bp.route('/api/alert/send', methods=['POST'])
+def send_alert():
+
+    data        = request.get_json()
+    to_email    = data.get('email')
+    farmer_name = data.get('name', 'Farmer')
+    alert_type  = data.get('alert_type', 'high_temp')
+    details     = data.get('details', {})
+
+    if not to_email:
+        return jsonify({
+            'status':  'error',
+            'message': 'Email address is required'
+        }), 400
+
+    success = send_weather_alert(
+        to_email,
+        farmer_name,
+        alert_type,
+        details
+    )
+
+    if success:
+        return jsonify({
+            'status':  'success',
+            'message': f'Alert email sent to {to_email}'
+        })
+    else:
+        return jsonify({
+            'status':  'error',
+            'message': 'Failed to send email'
+        }), 500
