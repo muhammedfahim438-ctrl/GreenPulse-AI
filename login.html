@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenPulse AI — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark: #0d3320; --green-mid: #1a5c38; --green-bright: #2ecc71;
+      --gold: #f0c040; --cream: #f4f7f5; --white: #ffffff;
+      --text-dark: #0d1f14; --text-muted: #6b7c6f; --border: #ddeae2; --red: #e74c3c;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .auth-wrap { display: flex; width: 100%; max-width: 860px; background: var(--white); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .auth-left { flex: 1; background: linear-gradient(160deg, var(--green-dark), var(--green-mid)); padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .auth-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--green-bright); }
+    .auth-logo span { color: var(--gold); }
+    .auth-left h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--white); line-height: 1.2; margin: 2rem 0 1rem; }
+    .auth-left p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.7; }
+    .auth-features { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+    .auth-feat { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+    .auth-feat::before { content: '✓'; background: var(--green-bright); color: var(--green-dark); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; flex-shrink: 0; }
+    .left-emoji { font-size: 5rem; margin-top: 2rem; }
+    .auth-right { flex: 1; padding: 3rem 2.5rem; }
+    .auth-right h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .auth-right > p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.2rem; }
+    label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    input { padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text-dark); background: var(--white); transition: border-color 0.2s; outline: none; width: 100%; }
+    input:focus { border-color: var(--green-bright); }
+    input.error { border-color: var(--red); }
+    .error-msg { font-size: 0.75rem; color: var(--red); display: none; }
+    .error-msg.show { display: block; }
+    .btn-login { width: 100%; padding: 0.9rem; background: var(--green-bright); color: var(--green-dark); border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s, transform 0.2s; }
+    .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .register-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+    .register-link a { color: var(--green-mid); font-weight: 600; text-decoration: none; }
+    .api-error { background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--red); margin-bottom: 1rem; display: none; }
+    .api-error.show { display: block; }
+    .demo-box { background: #f0f9f4; border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: var(--text-muted); }
+    .demo-box strong { color: var(--green-mid); }
+    @media (max-width: 700px) { .auth-wrap { flex-direction: column; } .auth-left { padding: 2rem; } .auth-right { padding: 2rem; } }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrap">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+      <div>
+        <div class="auth-logo">Green<span>Pulse</span> AI</div>
+        <h2>Welcome back, farmer! 🌾</h2>
+        <p>Log in to access your personalized farm dashboard, AI predictions, and weather alerts.</p>
+        <div class="auth-features">
+          <div class="auth-feat">View your yield predictions</div>
+          <div class="auth-feat">Check disease detections</div>
+          <div class="auth-feat">Monitor live weather</div>
+          <div class="auth-feat">Get smart farm alerts</div>
+        </div>
+      </div>
+      <div class="left-emoji">👨‍🌾</div>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="auth-right">
+      <h3>Sign in to your account</h3>
+      <p>Enter your email and password to continue.</p>
+
+      <!-- Demo credentials hint -->
+      <div class="demo-box">
+        🧪 <strong>Test account:</strong> ravi@gmail.com / farmer123
+      </div>
+
+      <!-- API Error -->
+      <div class="api-error" id="apiError"></div>
+
+      <!-- Login Form -->
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="ravi@gmail.com"/>
+        <span class="error-msg" id="emailErr">Please enter a valid email</span>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Your password"/>
+        <span class="error-msg" id="passErr">Please enter your password</span>
+      </div>
+
+      <button class="btn-login" id="loginBtn" onclick="login()">
+        🌱 Sign In
+      </button>
+
+      <div class="register-link">
+        Don't have an account?
+        <a href="register.html">Create one →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // clear errors
+      document.querySelectorAll('input').forEach(i => i.classList.remove('error'));
+      document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+      document.getElementById('apiError').classList.remove('show');
+
+      let valid = true;
+      if (!email || !email.includes('@')) {
+        document.getElementById('email').classList.add('error');
+        document.getElementById('emailErr').classList.add('show');
+        valid = false;
+      }
+      if (!password) {
+        document.getElementById('password').classList.add('error');
+        document.getElementById('passErr').classList.add('show');
+        valid = false;
+      }
+      if (!valid) return;
+
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = '⏳ Signing in...';
+      btn.disabled    = true;
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
+          method:      'POST',
+          headers:     { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          // save farmer to localStorage
+          localStorage.setItem('farmer', JSON.stringify(data.farmer));
+          // go to dashboard
+          window.location.href = 'dashboard.html';
+
+        } else {
+          const errBox       = document.getElementById('apiError');
+          errBox.textContent = '❌ ' + data.message;
+          errBox.classList.add('show');
+          btn.textContent = '🌱 Sign In';
+          btn.disabled    = false;
+        }
+
+      } catch (error) {
+        const errBox       = document.getElementById('apiError');
+        errBox.textContent = '❌ Cannot connect to server! Make sure Flask is running.';
+        errBox.classList.add('show');
+        btn.textContent = '🌱 Sign In';
+        btn.disabled    = false;
+      }
+    }
+
+    // allow pressing Enter to login
+    document.addEventListener('keypress', e => {
+      if (e.key === 'Enter') login();
+    });
+  </script>
+
+</body>
+</html>

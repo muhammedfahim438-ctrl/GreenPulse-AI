@@ -4,314 +4,63 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GreenPulse AI — Register</title>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-
   <style>
-
-    /* ══════════════════════════════
-       RESET & VARIABLES
-    ══════════════════════════════ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --green-dark:   #0d3320;
-      --green-mid:    #1a5c38;
-      --green-bright: #2ecc71;
-      --green-soft:   #a8f0c6;
-      --gold:         #f0c040;
-      --cream:        #f4f7f5;
-      --white:        #ffffff;
-      --text-dark:    #0d1f14;
-      --text-muted:   #6b7c6f;
-      --border:       #ddeae2;
-      --red:          #e74c3c;
+      --green-dark: #0d3320; --green-mid: #1a5c38; --green-bright: #2ecc71;
+      --green-soft: #a8f0c6; --gold: #f0c040; --cream: #f4f7f5;
+      --white: #ffffff; --text-dark: #0d1f14; --text-muted: #6b7c6f;
+      --border: #ddeae2; --red: #e74c3c;
     }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    /* ══════════════════════════════
-       MAIN WRAPPER
-       left side = green panel
-       right side = form
-    ══════════════════════════════ */
-    .auth-wrap {
-      display: flex;
-      width: 100%;
-      max-width: 960px;
-      background: var(--white);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-    }
-
-    /* ══════════════════════════════
-       LEFT GREEN PANEL
-    ══════════════════════════════ */
-    .auth-left {
-      flex: 1;
-      background: linear-gradient(
-        160deg, var(--green-dark), var(--green-mid)
-      );
-      padding: 3rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .auth-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--green-bright);
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .auth-wrap { display: flex; width: 100%; max-width: 960px; background: var(--white); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .auth-left { flex: 1; background: linear-gradient(160deg, var(--green-dark), var(--green-mid)); padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .auth-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--green-bright); }
     .auth-logo span { color: var(--gold); }
-
-    .auth-left h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--white);
-      line-height: 1.2;
-      margin: 2rem 0 1rem;
-    }
-
-    .auth-left p {
-      color: rgba(255,255,255,0.6);
-      font-size: 0.9rem;
-      line-height: 1.7;
-    }
-
-    /* checklist of features */
-    .auth-features {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin-top: 2rem;
-    }
-
-    .auth-feat {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.75);
-    }
-
-    /* green circle checkmark */
-    .auth-feat::before {
-      content: '✓';
-      background: var(--green-bright);
-      color: var(--green-dark);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-
-    .left-emoji {
-      font-size: 5rem;
-      margin-top: 2rem;
-    }
-
-    /* ══════════════════════════════
-       RIGHT FORM PANEL
-    ══════════════════════════════ */
-    .auth-right {
-      flex: 1;
-      padding: 3rem 2.5rem;
-      overflow-y: auto;
-    }
-
-    .auth-right h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-
-    .auth-right > p {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      margin-bottom: 2rem;
-    }
-
-    /* ══════════════════════════════
-       FORM ELEMENTS
-    ══════════════════════════════ */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
-    }
-
-    /* two inputs side by side */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    input, select {
-      padding: 0.75rem 1rem;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      color: var(--text-dark);
-      background: var(--white);
-      transition: border-color 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--green-bright);
-    }
-
-    /* show red border if input is invalid */
-    input.error {
-      border-color: var(--red);
-    }
-
-    .error-msg {
-      font-size: 0.75rem;
-      color: var(--red);
-      display: none;
-    }
-    .error-msg.show {
-      display: block;
-    }
-
-    /* ══════════════════════════════
-       REGISTER BUTTON
-    ══════════════════════════════ */
-    .btn-register {
-      width: 100%;
-      padding: 0.9rem;
-      background: var(--green-bright);
-      color: var(--green-dark);
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .btn-register:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* already have account link */
-    .login-link {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-    .login-link a {
-      color: var(--green-mid);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    /* ══════════════════════════════
-       SUCCESS MESSAGE
-       shown after form is submitted
-    ══════════════════════════════ */
-    .success-box {
-      display: none;
-      background: #e8f8f0;
-      border: 1px solid var(--green-bright);
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .success-box.show {
-      display: block;
-      animation: fadeUp 0.4s ease;
-    }
-    .success-box .icon {
-      font-size: 3rem;
-      margin-bottom: 0.8rem;
-    }
-    .success-box h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--green-dark);
-      margin-bottom: 0.5rem;
-    }
-    .success-box p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* ══════════════════════════════
-       ANIMATION
-    ══════════════════════════════ */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(15px); }
-      to   { opacity: 1; transform: translateY(0);    }
-    }
-
-    /* ══════════════════════════════
-       RESPONSIVE - MOBILE
-    ══════════════════════════════ */
-    @media (max-width: 700px) {
-      .auth-wrap  { flex-direction: column; }
-      .auth-left  { padding: 2rem; }
-      .auth-right { padding: 2rem; }
-      .form-row   { grid-template-columns: 1fr; }
-    }
-
+    .auth-left h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--white); line-height: 1.2; margin: 2rem 0 1rem; }
+    .auth-left p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.7; }
+    .auth-features { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+    .auth-feat { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+    .auth-feat::before { content: '✓'; background: var(--green-bright); color: var(--green-dark); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; flex-shrink: 0; }
+    .left-emoji { font-size: 5rem; margin-top: 2rem; }
+    .auth-right { flex: 1; padding: 3rem 2.5rem; overflow-y: auto; }
+    .auth-right h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .auth-right > p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    input, select { padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text-dark); background: var(--white); transition: border-color 0.2s; outline: none; width: 100%; }
+    input:focus, select:focus { border-color: var(--green-bright); }
+    input.error { border-color: var(--red); }
+    .error-msg { font-size: 0.75rem; color: var(--red); display: none; }
+    .error-msg.show { display: block; }
+    .btn-register { width: 100%; padding: 0.9rem; background: var(--green-bright); color: var(--green-dark); border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s, transform 0.2s; }
+    .btn-register:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-register:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .login-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+    .login-link a { color: var(--green-mid); font-weight: 600; text-decoration: none; }
+    .success-box { display: none; background: #e8f8f0; border: 1px solid var(--green-bright); border-radius: 12px; padding: 2rem; text-align: center; margin-top: 1rem; }
+    .success-box.show { display: block; animation: fadeUp 0.4s ease; }
+    .success-box .icon { font-size: 3rem; margin-bottom: 0.8rem; }
+    .success-box h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green-dark); margin-bottom: 0.5rem; }
+    .success-box p { font-size: 0.85rem; color: var(--text-muted); }
+    .api-error { background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--red); margin-bottom: 1rem; display: none; }
+    .api-error.show { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 700px) { .auth-wrap { flex-direction: column; } .auth-left { padding: 2rem; } .auth-right { padding: 2rem; } .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
   <div class="auth-wrap">
 
-    <!-- ════════ LEFT PANEL ════════ -->
+    <!-- LEFT PANEL -->
     <div class="auth-left">
       <div>
         <div class="auth-logo">Green<span>Pulse</span> AI</div>
-
         <h2>Start your smart farming journey</h2>
-
-        <p>
-          Join thousands of farmers using AI to boost yields,
-          detect disease early, and farm smarter.
-        </p>
-
+        <p>Join thousands of farmers using AI to boost yields, detect disease early, and farm smarter.</p>
         <div class="auth-features">
           <div class="auth-feat">AI crop yield prediction</div>
           <div class="auth-feat">Plant disease detection</div>
@@ -320,214 +69,202 @@
           <div class="auth-feat">Free to get started</div>
         </div>
       </div>
-
       <div class="left-emoji">🌿</div>
     </div>
 
-    <!-- ════════ RIGHT FORM PANEL ════════ -->
+    <!-- RIGHT FORM PANEL -->
     <div class="auth-right">
       <h3>Create your account</h3>
       <p>Fill in your details to get started with GreenPulse AI.</p>
 
+      <!-- API Error Message -->
+      <div class="api-error" id="apiError"></div>
+
       <!-- Registration Form -->
       <div id="regForm">
 
-        <!-- First Name + Last Name -->
         <div class="form-row">
           <div class="form-group">
             <label>First Name</label>
-            <input
-              type="text"
-              id="fname"
-              placeholder="Ravi"
-            />
-            <span class="error-msg" id="fnameErr">
-              Please enter your first name
-            </span>
+            <input type="text" id="fname" placeholder="Ravi"/>
+            <span class="error-msg" id="fnameErr">Please enter your first name</span>
           </div>
           <div class="form-group">
             <label>Last Name</label>
-            <input
-              type="text"
-              id="lname"
-              placeholder="Kumar"
-            />
-            <span class="error-msg" id="lnameErr">
-              Please enter your last name
-            </span>
+            <input type="text" id="lname" placeholder="Kumar"/>
+            <span class="error-msg" id="lnameErr">Please enter your last name</span>
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label>Email Address</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="ravi@example.com"
-          />
-          <span class="error-msg" id="emailErr">
-            Please enter a valid email
-          </span>
+          <input type="email" id="email" placeholder="ravi@example.com"/>
+          <span class="error-msg" id="emailErr">Please enter a valid email</span>
         </div>
 
-        <!-- Phone -->
         <div class="form-group">
           <label>Phone Number</label>
-          <input
-            type="tel"
-            id="phone"
-            placeholder="+91 98765 43210"
-          />
+          <input type="tel" id="phone" placeholder="+91 98765 43210"/>
         </div>
 
-        <!-- Location + Farm Size -->
         <div class="form-row">
           <div class="form-group">
             <label>Location / Village</label>
-            <input
-              type="text"
-              id="location"
-              placeholder="Pune, Maharashtra"
-            />
+            <input type="text" id="location" placeholder="Chennai, Tamil Nadu"/>
           </div>
           <div class="form-group">
             <label>Farm Size (Hectares)</label>
-            <input
-              type="number"
-              id="farmsize"
-              placeholder="5"
-              min="0.1"
-            />
+            <input type="number" id="farmsize" placeholder="5" min="0.1"/>
           </div>
         </div>
 
-        <!-- Primary Crop -->
         <div class="form-group">
           <label>Primary Crop</label>
           <select id="primarycrop">
             <option value="">-- Select your crop --</option>
-            <option>🌾 Wheat</option>
-            <option>🌽 Maize</option>
-            <option>🍚 Rice</option>
-            <option>🍅 Tomato</option>
-            <option>🌿 Cotton</option>
-            <option>🥔 Potato</option>
-            <option>Other</option>
+            <option value="wheat">🌾 Wheat</option>
+            <option value="maize">🌽 Maize</option>
+            <option value="rice">🍚 Rice</option>
+            <option value="tomato">🍅 Tomato</option>
+            <option value="cotton">🌿 Cotton</option>
+            <option value="potato">🥔 Potato</option>
+            <option value="sugarcane">🎋 Sugarcane</option>
+            <option value="soybean">🫘 Soybean</option>
+            <option value="groundnut">🥜 Groundnut</option>
+            <option value="onion">🧅 Onion</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
-        <!-- Password -->
         <div class="form-group">
           <label>Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Create a strong password"
-          />
-          <span class="error-msg" id="passErr">
-            Password must be at least 6 characters
-          </span>
+          <input type="password" id="password" placeholder="Create a strong password"/>
+          <span class="error-msg" id="passErr">Password must be at least 6 characters</span>
         </div>
 
-        <!-- Register Button -->
-        <button class="btn-register" onclick="register()">
+        <button class="btn-register" id="registerBtn" onclick="register()">
           🌱 Create Account
         </button>
 
         <div class="login-link">
           Already have an account?
-          <a href="dashboard.html">Sign in →</a>
+          <a href="login.html">Sign in →</a>
         </div>
 
       </div>
-      <!-- end regForm -->
 
-      <!-- Success Message (hidden until form submitted) -->
+      <!-- Success Message -->
       <div class="success-box" id="successBox">
         <div class="icon">🎉</div>
         <h4>Welcome to GreenPulse AI!</h4>
-        <p>
-          Your farmer account has been created successfully.<br>
-          Redirecting to your dashboard...
-        </p>
+        <p>Your farmer account has been created successfully.<br>Redirecting to your dashboard...</p>
       </div>
 
     </div>
-    <!-- end auth-right -->
 
   </div>
-  <!-- end auth-wrap -->
 
-  <!-- ════════════ JAVASCRIPT ════════════ -->
   <script>
 
-    function register() {
+    async function register() {
 
-      // get all field values
-      const fname    = document.getElementById('fname').value.trim();
-      const lname    = document.getElementById('lname').value.trim();
-      const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+      const fname      = document.getElementById('fname').value.trim();
+      const lname      = document.getElementById('lname').value.trim();
+      const email      = document.getElementById('email').value.trim();
+      const phone      = document.getElementById('phone').value.trim();
+      const location   = document.getElementById('location').value.trim();
+      const farmsize   = document.getElementById('farmsize').value;
+      const primarycrop = document.getElementById('primarycrop').value;
+      const password   = document.getElementById('password').value;
 
-      // reset all errors first
       clearErrors();
 
-      // track if form is valid
       let valid = true;
 
-      // check first name
-      if (!fname) {
-        showError('fname', 'fnameErr');
-        valid = false;
-      }
+      if (!fname)                    { showError('fname',    'fnameErr'); valid = false; }
+      if (!lname)                    { showError('lname',    'lnameErr'); valid = false; }
+      if (!email || !email.includes('@')) { showError('email', 'emailErr'); valid = false; }
+      if (password.length < 6)       { showError('password', 'passErr');  valid = false; }
 
-      // check last name
-      if (!lname) {
-        showError('lname', 'lnameErr');
-        valid = false;
-      }
+      if (!valid) return;
 
-      // check email has @ symbol
-      if (!email || !email.includes('@')) {
-        showError('email', 'emailErr');
-        valid = false;
-      }
+      // show loading on button
+      const btn       = document.getElementById('registerBtn');
+      btn.textContent = '⏳ Creating account...';
+      btn.disabled    = true;
 
-      // check password length
-      if (password.length < 6) {
-        showError('password', 'passErr');
-        valid = false;
-      }
+      // hide any previous API error
+      document.getElementById('apiError').classList.remove('show');
 
-      // if all fields are valid show success
-      if (valid) {
-        document.getElementById('regForm').style.display = 'none';
-        const box = document.getElementById('successBox');
-        box.classList.add('show');
+      try {
 
-        // redirect to dashboard after 2.5 seconds
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 2500);
+        // send to Flask backend
+        const response = await fetch('http://127.0.0.1:5000/api/auth/register', {
+          method:      'POST',
+          headers:     { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            first_name:   fname,
+            last_name:    lname,
+            email:        email,
+            phone:        phone,
+            location:     location,
+            farm_size:    parseFloat(farmsize) || 0,
+            primary_crop: primarycrop,
+            password:     password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+
+          // save farmer info to localStorage
+          localStorage.setItem('farmer', JSON.stringify(data.farmer));
+
+          // show success message
+          document.getElementById('regForm').style.display = 'none';
+          document.getElementById('successBox').classList.add('show');
+
+          // redirect to dashboard after 2.5 seconds
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 2500);
+
+        } else {
+
+          // show API error
+          const errBox       = document.getElementById('apiError');
+          errBox.textContent = '❌ ' + data.message;
+          errBox.classList.add('show');
+
+          btn.textContent = '🌱 Create Account';
+          btn.disabled    = false;
+        }
+
+      } catch (error) {
+
+        const errBox       = document.getElementById('apiError');
+        errBox.textContent = '❌ Cannot connect to server! Make sure Flask is running.';
+        errBox.classList.add('show');
+
+        btn.textContent = '🌱 Create Account';
+        btn.disabled    = false;
       }
     }
 
-    // show red border + error message
     function showError(inputId, errId) {
       document.getElementById(inputId).classList.add('error');
       document.getElementById(errId).classList.add('show');
     }
 
-    // clear all red borders + error messages
     function clearErrors() {
-      const inputs = document.querySelectorAll('input');
-      inputs.forEach(i => i.classList.remove('error'));
-      const errors = document.querySelectorAll('.error-msg');
-      errors.forEach(e => e.classList.remove('show'));
+      document.querySelectorAll('input').forEach(i => i.classList.remove('error'));
+      document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
     }
 
   </script>
 
 </body>
 </html>
+<!-- register.html already written above -->
