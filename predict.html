@@ -4,20 +4,10 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GreenPulse AI — Crop Yield Prediction</title>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
-
-    /* ══════════════════════════════
-       RESET & VARIABLES
-    ══════════════════════════════ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --green-dark:   #0d3320;
@@ -41,10 +31,7 @@
       min-height: 100vh;
     }
 
-    /* ══════════════════════════════
-       SIDEBAR
-       (same as dashboard)
-    ══════════════════════════════ */
+    /* ── SIDEBAR ── */
     .sidebar {
       width: var(--sidebar-w);
       background: var(--green-dark);
@@ -55,7 +42,6 @@
       padding: 2rem 1.5rem;
       z-index: 50;
     }
-
     .sidebar-logo {
       font-family: 'Playfair Display', serif;
       font-size: 1.4rem;
@@ -66,7 +52,6 @@
       border-bottom: 1px solid rgba(46,204,113,0.2);
     }
     .sidebar-logo span { color: var(--gold); }
-
     .sidebar-section-label {
       font-size: 0.65rem;
       letter-spacing: 1.5px;
@@ -76,7 +61,6 @@
       margin-top: 1.5rem;
       font-weight: 600;
     }
-
     .nav-item {
       display: flex;
       align-items: center;
@@ -90,75 +74,29 @@
       transition: background 0.2s, color 0.2s;
       margin-bottom: 0.2rem;
     }
-    .nav-item:hover {
-      background: rgba(46,204,113,0.1);
-      color: var(--white);
-    }
-    .nav-item.active {
-      background: rgba(46,204,113,0.18);
-      color: var(--green-bright);
-    }
-    .nav-item .icon {
-      font-size: 1.1rem;
-      width: 22px;
-      text-align: center;
-    }
-
+    .nav-item:hover { background: rgba(46,204,113,0.1); color: var(--white); }
+    .nav-item.active { background: rgba(46,204,113,0.18); color: var(--green-bright); }
+    .nav-item .icon { font-size: 1.1rem; width: 22px; text-align: center; }
     .sidebar-footer {
       margin-top: auto;
       padding-top: 1.5rem;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
-    .farmer-info {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
+    .farmer-info { display: flex; align-items: center; gap: 0.8rem; }
     .farmer-avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
+      width: 38px; height: 38px; border-radius: 50%;
       background: var(--green-bright);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem;
     }
-    .farmer-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-    .farmer-role {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.4);
-    }
+    .farmer-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .farmer-role { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
 
-    /* ══════════════════════════════
-       MAIN CONTENT
-    ══════════════════════════════ */
-    .main {
-      margin-left: var(--sidebar-w);
-      flex: 1;
-      padding: 2rem 2.5rem;
-    }
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; padding: 2rem 2.5rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .page-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
 
-    .page-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-
-    .page-sub {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-    }
-
-    /* ══════════════════════════════
-       WHITE CARD
-    ══════════════════════════════ */
     .card {
       background: var(--white);
       border: 1.5px solid var(--border);
@@ -166,39 +104,16 @@
       padding: 2rem;
       margin-bottom: 1.5rem;
     }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
 
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ══════════════════════════════
-       FORM LAYOUT
-    ══════════════════════════════ */
-
-    /* 2 columns side by side */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
+    /* ── FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
     label {
-      font-size: 0.78rem;
-      font-weight: 700;
+      font-size: 0.78rem; font-weight: 700;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
-
     input, select {
       padding: 0.75rem 1rem;
       border: 1.5px solid var(--border);
@@ -211,28 +126,12 @@
       outline: none;
       width: 100%;
     }
+    input:focus, select:focus { border-color: var(--green-bright); }
+    input[type="range"] { padding: 0; border: none; cursor: pointer; accent-color: var(--green-bright); }
+    .humidity-value { font-size: 0.9rem; font-weight: 600; color: var(--green-mid); }
+    .field-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
 
-    input:focus, select:focus {
-      border-color: var(--green-bright);
-    }
-
-    /* humidity slider */
-    input[type="range"] {
-      padding: 0;
-      border: none;
-      cursor: pointer;
-      accent-color: var(--green-bright);
-    }
-
-    .humidity-value {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--green-mid);
-    }
-
-    /* ══════════════════════════════
-       PREDICT BUTTON
-    ══════════════════════════════ */
+    /* ── BUTTON ── */
     .btn-predict {
       background: var(--green-bright);
       color: var(--green-dark);
@@ -248,153 +147,135 @@
       align-items: center;
       gap: 0.5rem;
     }
-    .btn-predict:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
+    .btn-predict:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-predict:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* ══════════════════════════════
-       RESULT BOX
-       shown after prediction
-    ══════════════════════════════ */
+    /* ── RESULT BOX ── */
     .result-box {
       display: none;
-      background: linear-gradient(
-        135deg, var(--green-dark), var(--green-mid)
-      );
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
       border-radius: 16px;
       padding: 2.5rem;
       color: var(--white);
       margin-top: 1.5rem;
       text-align: center;
     }
-
-    /* show class added by JavaScript */
-    .result-box.show {
-      display: block;
-      animation: fadeUp 0.5s ease;
-    }
-
+    .result-box.show { display: block; animation: fadeUp 0.5s ease; }
     .result-label {
-      font-size: 0.8rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--green-soft);
-      margin-bottom: 0.8rem;
+      font-size: 0.8rem; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--green-soft); margin-bottom: 0.8rem;
     }
-
-    /* big yield number */
     .result-yield {
       font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      font-weight: 900;
-      color: var(--green-bright);
-      line-height: 1;
+      font-size: 4rem; font-weight: 900;
+      color: var(--green-bright); line-height: 1;
     }
-
-    .result-unit {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.6);
-      margin-top: 0.3rem;
-    }
-
+    .result-unit { font-size: 1rem; color: rgba(255,255,255,0.6); margin-top: 0.3rem; }
     .result-total {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.7);
-      margin-top: 0.8rem;
-      padding: 0.6rem 1.5rem;
+      font-size: 0.9rem; color: rgba(255,255,255,0.7);
+      margin-top: 0.8rem; padding: 0.6rem 1.5rem;
       background: rgba(255,255,255,0.1);
-      border-radius: 50px;
+      border-radius: 50px; display: inline-block;
+    }
+    .result-status {
       display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.4rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.2);
+      color: white;
     }
 
-    /* 3 tips below result */
-    .tips-grid {
+    /* ── TIPS & SOIL SECTIONS ── */
+    .result-sections {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
       margin-top: 2rem;
       text-align: left;
     }
-
-    .tip-card {
+    .result-section {
       background: rgba(255,255,255,0.1);
       border-radius: 12px;
-      padding: 1.2rem;
-      font-size: 0.85rem;
+      padding: 1.5rem;
     }
-
-    .tip-card strong {
-      display: block;
-      margin-bottom: 0.4rem;
-      color: var(--green-soft);
+    .result-section h3 {
       font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--green-soft);
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
-
-    .tip-card p {
-      color: rgba(255,255,255,0.7);
+    .result-section ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .result-section ul li {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
       line-height: 1.5;
+      padding: 0.5rem 0.8rem;
+      background: rgba(255,255,255,0.07);
+      border-radius: 8px;
     }
 
-    /* ══════════════════════════════
-       HOW IT WORKS INFO BOX
-    ══════════════════════════════ */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-    }
-
+    /* ── INFO GRID ── */
+    .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
     .info-item {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: var(--cream);
-      border-radius: 12px;
+      text-align: center; padding: 1.5rem 1rem;
+      background: var(--cream); border-radius: 12px;
       border: 1px solid var(--border);
     }
+    .info-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .info-item h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .info-item p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
 
-    .info-icon {
-      font-size: 2rem;
-      margin-bottom: 0.8rem;
+    /* ── CROP SELECTOR GRID ── */
+    .crop-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
     }
-
-    .info-item h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      margin-bottom: 0.4rem;
-      color: var(--text-dark);
-    }
-
-    .info-item p {
-      font-size: 0.8rem;
+    .crop-btn {
+      padding: 0.5rem 0.3rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--text-muted);
-      line-height: 1.5;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .crop-btn:hover { border-color: var(--green-bright); color: var(--green-mid); }
+    .crop-btn.selected {
+      border-color: var(--green-bright);
+      background: rgba(46,204,113,0.1);
+      color: var(--green-dark);
     }
 
-    /* ══════════════════════════════
-       ANIMATION
-    ══════════════════════════════ */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0);    }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ══════════════════════════════
-       RESPONSIVE
-    ══════════════════════════════ */
     @media (max-width: 768px) {
       .sidebar { width: 60px; padding: 1.5rem 0.5rem; }
-      .sidebar-logo,
-      .nav-item span,
-      .farmer-name,
-      .farmer-role,
-      .sidebar-section-label { display: none; }
-      .main       { margin-left: 60px; padding: 1rem; }
-      .form-grid  { grid-template-columns: 1fr; }
-      .tips-grid  { grid-template-columns: 1fr; }
-      .info-grid  { grid-template-columns: repeat(2, 1fr); }
+      .sidebar-logo, .nav-item span, .farmer-name, .farmer-role, .sidebar-section-label { display: none; }
+      .main { margin-left: 60px; padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+      .result-sections { grid-template-columns: 1fr; }
+      .crop-grid { grid-template-columns: repeat(3, 1fr); }
     }
-
   </style>
 </head>
 <body>
@@ -402,95 +283,69 @@
   <!-- ════════════ SIDEBAR ════════════ -->
   <aside class="sidebar">
     <div class="sidebar-logo">Green<span>Pulse</span> AI</div>
-
     <div class="sidebar-section-label">Main</div>
-
-    <a class="nav-item" href="dashboard.html">
-      <span class="icon">📊</span>
-      <span>Dashboard</span>
-    </a>
-
-    <!-- predict is active on this page -->
-    <a class="nav-item active" href="predict.html">
-      <span class="icon">🌾</span>
-      <span>Yield Prediction</span>
-    </a>
-
-    <a class="nav-item" href="upload.html">
-      <span class="icon">🔬</span>
-      <span>Disease Detection</span>
-    </a>
-
+    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span><span>Dashboard</span></a>
+    <a class="nav-item active" href="predict.html"><span class="icon">🌾</span><span>Yield Prediction</span></a>
+    <a class="nav-item" href="upload.html"><span class="icon">🔬</span><span>Disease Detection</span></a>
     <div class="sidebar-section-label">Monitoring</div>
-
-    <a class="nav-item" href="#">
-      <span class="icon">🌦️</span>
-      <span>Weather</span>
-    </a>
-
-    <a class="nav-item" href="#">
-      <span class="icon">🔔</span>
-      <span>Alerts</span>
-    </a>
-
+    <a class="nav-item" href="#"><span class="icon">🌦️</span><span>Weather</span></a>
+    <a class="nav-item" href="#"><span class="icon">🔔</span><span>Alerts</span></a>
     <div class="sidebar-section-label">Account</div>
-
-    <a class="nav-item" href="index.html">
-      <span class="icon">🏠</span>
-      <span>Home</span>
-    </a>
-
-    <a class="nav-item" href="#">
-      <span class="icon">⚙️</span>
-      <span>Settings</span>
-    </a>
-
+    <a class="nav-item" href="index.html"><span class="icon">🏠</span><span>Home</span></a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span><span>Settings</span></a>
     <div class="sidebar-footer">
       <div class="farmer-info">
         <div class="farmer-avatar">👨‍🌾</div>
         <div>
           <div class="farmer-name">Ravi Kumar</div>
-          <div class="farmer-role">Wheat Farmer</div>
+          <div class="farmer-role">Smart Farmer</div>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- ════════════ MAIN CONTENT ════════════ -->
+  <!-- ════════════ MAIN ════════════ -->
   <main class="main">
 
     <div class="page-title">Crop Yield Prediction</div>
-    <p class="page-sub">
-      Enter your farm details below to get an
-      AI-powered yield forecast.
-    </p>
+    <p class="page-sub">Enter your farm details to get an AI-powered yield forecast with farming tips.</p>
 
-    <!-- PREDICTION FORM CARD -->
+    <!-- FORM CARD -->
     <div class="card">
       <div class="card-title">🌾 Enter Your Farm Details</div>
 
-      <div class="form-grid">
-
-        <!-- Crop Type -->
-        <div class="form-group">
-          <label>Crop Type</label>
-          <select id="crop">
-            <option value="wheat">🌾 Wheat</option>
-            <option value="maize">🌽 Maize</option>
-            <option value="rice">🍚 Rice</option>
-            <option value="tomato">🍅 Tomato</option>
-            <option value="cotton">🌿 Cotton</option>
-            <option value="potato">🥔 Potato</option>
-          </select>
+      <!-- CROP SELECTOR -->
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:block; margin-bottom:0.8rem;">Select Crop</label>
+        <div class="crop-grid">
+          <div class="crop-btn selected" onclick="selectCrop(this,'wheat')">🌾 Wheat</div>
+          <div class="crop-btn" onclick="selectCrop(this,'maize')">🌽 Maize</div>
+          <div class="crop-btn" onclick="selectCrop(this,'rice')">🍚 Rice</div>
+          <div class="crop-btn" onclick="selectCrop(this,'tomato')">🍅 Tomato</div>
+          <div class="crop-btn" onclick="selectCrop(this,'cotton')">🌿 Cotton</div>
+          <div class="crop-btn" onclick="selectCrop(this,'potato')">🥔 Potato</div>
+          <div class="crop-btn" onclick="selectCrop(this,'sugarcane')">🎋 Sugarcane</div>
+          <div class="crop-btn" onclick="selectCrop(this,'soybean')">🫘 Soybean</div>
+          <div class="crop-btn" onclick="selectCrop(this,'sunflower')">🌻 Sunflower</div>
+          <div class="crop-btn" onclick="selectCrop(this,'groundnut')">🥜 Groundnut</div>
+          <div class="crop-btn" onclick="selectCrop(this,'onion')">🧅 Onion</div>
+          <div class="crop-btn" onclick="selectCrop(this,'banana')">🍌 Banana</div>
+          <div class="crop-btn" onclick="selectCrop(this,'mango')">🥭 Mango</div>
+          <div class="crop-btn" onclick="selectCrop(this,'chilli')">🌶️ Chilli</div>
+          <div class="crop-btn" onclick="selectCrop(this,'turmeric')">🟡 Turmeric</div>
         </div>
+        <input type="hidden" id="crop" value="wheat"/>
+      </div>
+
+      <div class="form-grid">
 
         <!-- Soil Type -->
         <div class="form-group">
           <label>Soil Type</label>
           <select id="soil">
+            <option value="alluvial">Alluvial Soil</option>
             <option value="black">Black Cotton Soil</option>
             <option value="red">Red Laterite Soil</option>
-            <option value="alluvial">Alluvial Soil</option>
             <option value="sandy">Sandy Loam</option>
             <option value="clay">Clay Soil</option>
           </select>
@@ -499,57 +354,26 @@
         <!-- Farm Area -->
         <div class="form-group">
           <label>Farm Area (Hectares)</label>
-          <input
-            type="number"
-            id="area"
-            placeholder="e.g. 5"
-            min="0.1"
-            max="1000"
-            value="5"
-          />
+          <input type="number" id="area" placeholder="e.g. 5" min="0.1" max="1000" value="5"/>
         </div>
 
         <!-- Temperature -->
         <div class="form-group">
           <label>Temperature (°C)</label>
-          <input
-            type="number"
-            id="temp"
-            placeholder="e.g. 28"
-            min="0"
-            max="55"
-            value="28"
-          />
+          <input type="number" id="temp" placeholder="e.g. 28" min="0" max="55" value="28"/>
         </div>
 
         <!-- Rainfall -->
         <div class="form-group">
           <label>Rainfall (mm / year)</label>
-          <input
-            type="number"
-            id="rain"
-            placeholder="e.g. 800"
-            value="800"
-          />
+          <input type="number" id="rain" placeholder="e.g. 800" value="800"/>
         </div>
 
         <!-- Humidity Slider -->
         <div class="form-group">
-          <label>
-            Humidity —
-            <span class="humidity-value" id="hval">65%</span>
-          </label>
-          <input
-            type="range"
-            id="humidity"
-            min="10"
-            max="100"
-            value="65"
-            oninput="
-              document.getElementById('hval').textContent
-              = this.value + '%'
-            "
-          />
+          <label>Humidity — <span class="humidity-value" id="hval">65%</span></label>
+          <input type="range" id="humidity" min="10" max="100" value="65"
+            oninput="document.getElementById('hval').textContent = this.value + '%'"/>
         </div>
 
         <!-- Season -->
@@ -573,67 +397,56 @@
           </select>
         </div>
 
+        <!-- pH Level -->
+        <div class="form-group">
+          <label>🧪 Soil pH Level</label>
+          <input type="number" id="ph_level" placeholder="e.g. 6.5" value="6.5" min="4.5" max="8.5" step="0.1"/>
+          <span class="field-hint">Normal range: 6.0 – 7.5</span>
+        </div>
+
+        <!-- Irrigation -->
+        <div class="form-group">
+          <label>💧 Irrigation Type</label>
+          <select id="irrigation">
+            <option value="drip">Drip Irrigation</option>
+            <option value="sprinkler">Sprinkler</option>
+            <option value="rainfed">Rainfed</option>
+          </select>
+        </div>
+
       </div>
-      <!-- end form-grid -->
 
       <!-- Predict Button -->
       <button class="btn-predict" onclick="predictYield()">
         🌾 Predict My Yield
       </button>
 
-      <!-- Result Box (hidden until button clicked) -->
-      <!-- Result Box (hidden until button clicked) -->
-<div class="result-box" id="resultBox">
+      <!-- RESULT BOX -->
+      <div class="result-box" id="resultBox">
 
-  <div class="result-label">
-    AI Predicted Crop Yield
-  </div>
+        <div class="result-label">AI Predicted Crop Yield</div>
+        <div class="result-yield" id="yieldValue">3.6</div>
+        <div class="result-unit">tons per hectare</div>
 
-  <div class="result-yield" id="yieldValue">3.6</div>
-  <div class="result-unit">tons per hectare</div>
+        <div class="result-total" id="totalYield">
+          Total expected: 18 tons from your 5 ha farm
+        </div>
 
-  <div class="result-total" id="totalYield">
-    Total expected: 18 tons from your 5 ha farm
-  </div>
+        <div class="result-status" id="yieldStatus"></div>
 
-  <!-- yield status badge -->
-  <div
-    id="yieldStatus"
-    style="
-      display: inline-block;
-      margin-top: 0.8rem;
-      padding: 0.4rem 1.5rem;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      background: rgba(255,255,255,0.2);
-      color: white;
-    "
-  >
-  </div>
-        <!-- 3 farming tips -->
-        <div class="tips-grid">
-          <div class="tip-card">
-            <strong>💧 Irrigation Tip</strong>
-            <p>
-              Consider drip irrigation to optimize
-              water use during dry spells.
-            </p>
+        <!-- Tips and Soil Advice -->
+        <div class="result-sections">
+
+          <div class="result-section">
+            <h3>🌾 Farming Tips</h3>
+            <ul id="farmingTips"></ul>
           </div>
-          <div class="tip-card">
-            <strong>🌿 Fertilizer Tip</strong>
-            <p>
-              Apply nitrogen-rich fertilizer during
-              the early crop growth stage.
-            </p>
+
+          <div class="result-section">
+            <h3>🌍 Soil Recommendations</h3>
+            <ul id="soilAdvice"></ul>
           </div>
-          <div class="tip-card">
-            <strong>🦠 Pest Control</strong>
-            <p>
-              Monitor for aphids and whitefly
-              during high humidity periods.
-            </p>
-          </div>
+
         </div>
 
       </div>
@@ -642,50 +455,30 @@
     </div>
     <!-- end card -->
 
-    <!-- HOW IT WORKS INFO SECTION -->
+    <!-- HOW IT WORKS -->
     <div class="card">
-      <div class="card-title">
-        📖 How Yield Prediction Works
-      </div>
-
+      <div class="card-title">📖 How Yield Prediction Works</div>
       <div class="info-grid">
-
         <div class="info-item">
           <div class="info-icon">📥</div>
           <h4>You Enter Farm Data</h4>
-          <p>
-            Crop type, soil, temperature,
-            rainfall and humidity.
-          </p>
+          <p>Crop type, soil, temperature, rainfall and humidity.</p>
         </div>
-
         <div class="info-item">
           <div class="info-icon">🤖</div>
           <h4>AI Processes Data</h4>
-          <p>
-            Machine learning model analyzes
-            all your farm parameters.
-          </p>
+          <p>Gradient Boosting model analyzes all your farm parameters.</p>
         </div>
-
         <div class="info-item">
           <div class="info-icon">📊</div>
           <h4>Yield is Calculated</h4>
-          <p>
-            Expected yield in tons per
-            hectare is calculated.
-          </p>
+          <p>Expected yield in tons per hectare is calculated at 95.7% accuracy.</p>
         </div>
-
         <div class="info-item">
           <div class="info-icon">✅</div>
-          <h4>You Get Smart Tips</h4>
-          <p>
-            Farming tips to help you
-            improve your yield further.
-          </p>
+          <h4>Smart Tips Given</h4>
+          <p>Personalized farming tips and soil recommendations.</p>
         </div>
-
       </div>
     </div>
 
@@ -694,81 +487,94 @@
   <!-- ════════════ JAVASCRIPT ════════════ -->
   <script>
 
-    async function predictYield() {
-
-  // get all input values
-  const crop       = document.getElementById('crop').value;
-  const temp       = document.getElementById('temp').value;
-  const rain       = document.getElementById('rain').value;
-  const humidity   = document.getElementById('humidity').value;
-  const area       = document.getElementById('area').value;
-  const fertilizer = document.getElementById('fertilizer').value;
-  const season     = document.getElementById('season').value;
-  const soil       = document.getElementById('soil').value;
-
-  // show loading state on button
-  const btn = document.querySelector('.btn-predict');
-  btn.textContent = '⏳ Analyzing...';
-  btn.disabled = true;
-
-  try {
-
-    // send data to Flask backend
-    const response = await fetch('http://127.0.0.1:5000/api/predict', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        crop:        crop,
-        temperature: temp,
-        rainfall:    rain,
-        humidity:    humidity,
-        area:        area,
-        fertilizer:  fertilizer,
-        season:      season,
-        soil:        soil
-      })
-    });
-
-    // get result from backend
-    const data = await response.json();
-
-    if (data.status === 'success') {
-
-  // update yield value
-  document.getElementById('yieldValue').textContent =
-    data.predicted_yield;
-
-  // update total yield
-  document.getElementById('totalYield').textContent =
-    `Total expected: ${data.total_yield} tons from your ${data.area} ha farm`;
-
-  // update yield status badge
-  document.getElementById('yieldStatus').textContent =
-    `📊 Status: ${data.yield_status}`;
-
-  // show result box with animation
-  const box = document.getElementById('resultBox');
-  box.classList.remove('show');
-  setTimeout(() => {
-    box.classList.add('show');
-  }, 100);
+    // ── crop selector ──
+    function selectCrop(btn, cropValue) {
+      document.querySelectorAll('.crop-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('crop').value = cropValue;
     }
 
-  } catch (error) {
+    // ── predict yield ──
+    async function predictYield() {
 
-    // if backend is not running show error
-    alert('Cannot connect to backend server! Make sure Flask is running on port 5000.');
+      const crop       = document.getElementById('crop').value;
+      const temp       = document.getElementById('temp').value;
+      const rain       = document.getElementById('rain').value;
+      const humidity   = document.getElementById('humidity').value;
+      const area       = document.getElementById('area').value;
+      const fertilizer = document.getElementById('fertilizer').value;
+      const season     = document.getElementById('season').value;
+      const soil       = document.getElementById('soil').value;
+      const ph_level   = document.getElementById('ph_level').value;
+      const irrigation = document.getElementById('irrigation').value;
 
-  }
+      const btn = document.querySelector('.btn-predict');
+      btn.textContent = '⏳ Analyzing...';
+      btn.disabled = true;
 
-  // reset button
-  btn.textContent = '🌾 Predict My Yield';
-  btn.disabled = false;
+      try {
 
-}
-</script>
+        const response = await fetch('http://127.0.0.1:5000/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            crop, temperature: temp, rainfall: rain,
+            humidity, area, fertilizer, season,
+            soil, ph_level, irrigation
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+
+          // update yield
+          document.getElementById('yieldValue').textContent = data.predicted_yield;
+          document.getElementById('totalYield').textContent =
+            `Total expected: ${data.total_yield} tons from your ${data.area} ha farm`;
+          document.getElementById('yieldStatus').textContent =
+            `📊 Status: ${data.yield_status}`;
+
+          // farming tips
+          const tipsBox = document.getElementById('farmingTips');
+          tipsBox.innerHTML = '';
+          if (data.farming_tips) {
+            data.farming_tips.forEach(tip => {
+              const li = document.createElement('li');
+              li.textContent = '✅ ' + tip;
+              tipsBox.appendChild(li);
+            });
+          }
+
+          // soil advice
+          const soilBox = document.getElementById('soilAdvice');
+          soilBox.innerHTML = '';
+          if (data.soil_advice) {
+            data.soil_advice.forEach(advice => {
+              const li = document.createElement('li');
+              li.textContent = '🌱 ' + advice;
+              soilBox.appendChild(li);
+            });
+          }
+
+          // show result
+          const box = document.getElementById('resultBox');
+          box.classList.remove('show');
+          setTimeout(() => box.classList.add('show'), 100);
+
+        } else {
+          alert('Error: ' + data.message);
+        }
+
+      } catch (error) {
+        alert('Cannot connect to backend! Make sure Flask is running on port 5000.');
+      }
+
+      btn.textContent = '🌾 Predict My Yield';
+      btn.disabled = false;
+    }
+
+  </script>
 
 </body>
 </html>
