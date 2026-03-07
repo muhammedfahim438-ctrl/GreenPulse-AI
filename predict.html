@@ -582,19 +582,35 @@
       </button>
 
       <!-- Result Box (hidden until button clicked) -->
-      <div class="result-box" id="resultBox">
+      <!-- Result Box (hidden until button clicked) -->
+<div class="result-box" id="resultBox">
 
-        <div class="result-label">
-          AI Predicted Crop Yield
-        </div>
+  <div class="result-label">
+    AI Predicted Crop Yield
+  </div>
 
-        <div class="result-yield" id="yieldValue">3.6</div>
-        <div class="result-unit">tons per hectare</div>
+  <div class="result-yield" id="yieldValue">3.6</div>
+  <div class="result-unit">tons per hectare</div>
 
-        <div class="result-total" id="totalYield">
-          Total expected: 18 tons from your 5 ha farm
-        </div>
+  <div class="result-total" id="totalYield">
+    Total expected: 18 tons from your 5 ha farm
+  </div>
 
+  <!-- yield status badge -->
+  <div
+    id="yieldStatus"
+    style="
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.4rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.2);
+      color: white;
+    "
+  >
+  </div>
         <!-- 3 farming tips -->
         <div class="tips-grid">
           <div class="tip-card">
@@ -720,22 +736,24 @@
 
     if (data.status === 'success') {
 
-      // update yield value on page
-      document.getElementById('yieldValue').textContent =
-        data.predicted_yield;
+  // update yield value
+  document.getElementById('yieldValue').textContent =
+    data.predicted_yield;
 
-      // update total yield text
-      document.getElementById('totalYield').textContent =
-        `Total expected: ${data.total_yield} tons
-         from your ${data.area} ha farm`;
+  // update total yield
+  document.getElementById('totalYield').textContent =
+    `Total expected: ${data.total_yield} tons from your ${data.area} ha farm`;
 
-      // show result box with animation
-      const box = document.getElementById('resultBox');
-      box.classList.remove('show');
-      setTimeout(() => {
-        box.classList.add('show');
-      }, 100);
+  // update yield status badge
+  document.getElementById('yieldStatus').textContent =
+    `📊 Status: ${data.yield_status}`;
 
+  // show result box with animation
+  const box = document.getElementById('resultBox');
+  box.classList.remove('show');
+  setTimeout(() => {
+    box.classList.add('show');
+  }, 100);
     }
 
   } catch (error) {
