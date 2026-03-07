@@ -72,7 +72,10 @@ def predict_yield(
         season_num     = SEASON_MAP.get(season, 0)
 
         # create input array for model
-        features = np.array([[
+        import pandas as pd
+
+        # create input dataframe with feature names
+        features = pd.DataFrame([[
             crop_num,
             float(temperature),
             float(rainfall),
@@ -81,7 +84,17 @@ def predict_yield(
             fertilizer_num,
             soil_num,
             season_num
-        ]])
+        ]], columns=[
+            'crop', 'temperature', 'rainfall',
+            'humidity', 'area', 'fertilizer',
+            'soil', 'season'
+        ])
+
+        # get prediction from model
+        predicted = model.predict(features)[0]
+
+
+
 
         # get prediction from model
         predicted = model.predict(features)[0]
