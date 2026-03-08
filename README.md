@@ -134,10 +134,6 @@ GreenPulse-AI/
 ├── dashboard.html      # Farm dashboard
 ├── predict.html        # Yield prediction
 ├── upload.html         # Disease detection
-├── css/
-│   └── style.css       # Styles
-├── js/
-│   └── main.js         # JavaScript
 └── backend/
     ├── app.py          # Flask server
     ├── ai_model.py     # Yield AI model
