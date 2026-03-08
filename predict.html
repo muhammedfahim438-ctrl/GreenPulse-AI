@@ -42,22 +42,28 @@
     small { font-size: 0.75rem; color: var(--text-muted); }
     .btn-predict { background: var(--green-bright); color: var(--green-dark); border: none; padding: 1rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 1.5rem; transition: opacity 0.2s, transform 0.2s; display: flex; align-items: center; gap: 0.5rem; }
     .btn-predict:hover { opacity: 0.9; transform: translateY(-2px); }
-    .result-box { display: none; background: linear-gradient(135deg, var(--green-dark), var(--green-mid)); border-radius: 16px; padding: 2.5rem; color: var(--white); margin-top: 1.5rem; text-align: center; }
-    .result-box.show { display: block; animation: fadeUp 0.5s ease; }
-    .result-label { font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-soft); margin-bottom: 0.8rem; }
-    .result-yield { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: var(--green-bright); line-height: 1; }
+    .btn-predict:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* RESULT BOX — hidden by default using id selector for higher specificity */
+    #resultBox { display: none; background: linear-gradient(135deg, #0d3320, #1a5c38); border-radius: 16px; padding: 2.5rem; color: #ffffff; margin-top: 1.5rem; text-align: center; }
+    .result-label { font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: #a8f0c6; margin-bottom: 0.8rem; }
+    .result-yield { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: #2ecc71; line-height: 1; }
     .result-unit { font-size: 1rem; color: rgba(255,255,255,0.6); margin-top: 0.3rem; }
     .result-total { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 0.8rem; padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border-radius: 50px; display: inline-block; }
+    .result-status { display: inline-block; margin-top: 0.8rem; padding: 0.4rem 1.5rem; border-radius: 50px; font-size: 0.9rem; font-weight: 700; background: rgba(255,255,255,0.2); color: white; }
     .tips-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; text-align: left; }
     .tips-section { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 1.5rem; }
-    .tips-section h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--green-soft); margin-bottom: 1rem; }
+    .tips-section h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: #a8f0c6; margin-bottom: 1rem; }
     .tips-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
-    .tips-list li { font-size: 0.85rem; color: rgba(255,255,255,0.85); line-height: 1.5; padding: 0.5rem 0.8rem; background: rgba(255,255,255,0.07); border-radius: 8px; border-left: 3px solid var(--green-bright); }
+    .tips-list li { font-size: 0.85rem; color: rgba(255,255,255,0.85); line-height: 1.5; padding: 0.5rem 0.8rem; background: rgba(255,255,255,0.07); border-radius: 8px; border-left: 3px solid #2ecc71; }
+
     .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
     .info-item { text-align: center; padding: 1.5rem 1rem; background: var(--cream); border-radius: 12px; border: 1px solid var(--border); }
     .info-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-    .info-item h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-dark); }
+    .info-item h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.4rem; }
     .info-item p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .api-error { background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.85rem; color: #e74c3c; margin-top: 1rem; display: none; }
+    .api-error.show { display: block; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 768px) {
       .sidebar { width: 60px; padding: 1.5rem 0.5rem; }
@@ -86,8 +92,8 @@
       <div class="farmer-info">
         <div class="farmer-avatar">👨‍🌾</div>
         <div>
-          <div class="farmer-name">Ravi Kumar</div>
-          <div class="farmer-role">Wheat Farmer</div>
+          <div class="farmer-name" id="sidebarName">Ravi Kumar</div>
+          <div class="farmer-role" id="sidebarCrop">Wheat Farmer</div>
         </div>
       </div>
     </div>
@@ -102,7 +108,6 @@
       <div class="card-title">🌾 Enter Your Farm Details</div>
 
       <div class="form-grid">
-
         <div class="form-group">
           <label>Crop Type</label>
           <select id="crop">
@@ -123,7 +128,6 @@
             <option value="turmeric">🟡 Turmeric</option>
           </select>
         </div>
-
         <div class="form-group">
           <label>Soil Type</label>
           <select id="soil">
@@ -134,27 +138,23 @@
             <option value="clay">Clay Soil</option>
           </select>
         </div>
-
         <div class="form-group">
           <label>Farm Area (Hectares)</label>
-          <input type="number" id="area" placeholder="e.g. 5" min="0.1" max="1000" value="5"/>
+          <input type="number" id="area" value="5" min="0.1" max="1000"/>
         </div>
-
         <div class="form-group">
           <label>Temperature (°C)</label>
-          <input type="number" id="temp" placeholder="e.g. 28" min="0" max="55" value="28"/>
+          <input type="number" id="temp" value="28" min="0" max="55"/>
         </div>
-
         <div class="form-group">
           <label>Rainfall (mm / year)</label>
-          <input type="number" id="rain" placeholder="e.g. 800" value="800"/>
+          <input type="number" id="rain" value="800"/>
         </div>
-
         <div class="form-group">
           <label>Humidity — <span class="humidity-value" id="hval">65%</span></label>
-          <input type="range" id="humidity" min="10" max="100" value="65" oninput="document.getElementById('hval').textContent = this.value + '%'"/>
+          <input type="range" id="humidity" min="10" max="100" value="65"
+            oninput="document.getElementById('hval').textContent = this.value + '%'"/>
         </div>
-
         <div class="form-group">
           <label>Growing Season</label>
           <select id="season">
@@ -163,7 +163,6 @@
             <option value="zaid">Zaid (Mar – Jun)</option>
           </select>
         </div>
-
         <div class="form-group">
           <label>Fertilizer Used</label>
           <select id="fertilizer">
@@ -173,13 +172,11 @@
             <option value="none">None</option>
           </select>
         </div>
-
         <div class="form-group">
           <label>🧪 Soil pH Level</label>
-          <input type="number" id="ph_level" placeholder="e.g. 6.5" value="6.5" min="4.5" max="8.5" step="0.1"/>
+          <input type="number" id="ph_level" value="6.5" min="4.5" max="8.5" step="0.1"/>
           <small>Normal range: 6.0 - 7.5</small>
         </div>
-
         <div class="form-group">
           <label>💧 Irrigation Type</label>
           <select id="irrigation">
@@ -188,35 +185,31 @@
             <option value="rainfed">Rainfed</option>
           </select>
         </div>
-
       </div>
 
-      <button class="btn-predict" onclick="predictYield()">🌾 Predict My Yield</button>
+      <button class="btn-predict" id="predictBtn" onclick="predictYield()">
+        🌾 Predict My Yield
+      </button>
 
-      <div class="result-box" id="resultBox">
+      <div class="api-error" id="apiError"></div>
 
+      <!-- RESULT BOX -->
+      <div id="resultBox">
         <div class="result-label">AI Predicted Crop Yield</div>
-        <div class="result-yield" id="yieldValue">3.6</div>
+        <div class="result-yield" id="yieldValue">—</div>
         <div class="result-unit">tons per hectare</div>
-        <div class="result-total" id="totalYield">Total expected: 18 tons from your 5 ha farm</div>
-
-        <div id="yieldStatus" style="display:inline-block;margin-top:0.8rem;padding:0.4rem 1.5rem;border-radius:50px;font-size:0.9rem;font-weight:700;background:rgba(255,255,255,0.2);color:white;"></div>
-
+        <div class="result-total" id="totalYield"></div>
+        <div class="result-status" id="yieldStatus"></div>
         <div class="tips-two-col">
           <div class="tips-section">
             <h3>🌾 Farming Tips</h3>
-            <ul class="tips-list" id="farmingTips">
-              <li>✅ Tips will appear after prediction</li>
-            </ul>
+            <ul class="tips-list" id="farmingTips"></ul>
           </div>
           <div class="tips-section">
             <h3>🌍 Soil Recommendations</h3>
-            <ul class="tips-list" id="soilAdvice">
-              <li>🌱 Soil advice will appear after prediction</li>
-            </ul>
+            <ul class="tips-list" id="soilAdvice"></ul>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -234,75 +227,116 @@
   </main>
 
   <script>
+
+    window.onload = function() {
+      const farmer = JSON.parse(localStorage.getItem('farmer') || '{}');
+      if (farmer.first_name) {
+        document.getElementById('sidebarName').textContent = farmer.first_name + ' ' + (farmer.last_name || '');
+        document.getElementById('sidebarCrop').textContent = farmer.primary_crop || 'Farmer';
+      }
+    };
+
+    function showResult(data, area) {
+      // fill in values
+      document.getElementById('yieldValue').textContent = data.predicted_yield;
+      document.getElementById('totalYield').textContent = 'Total expected: ' + data.total_yield + ' tons from your ' + area + ' ha farm';
+      document.getElementById('yieldStatus').textContent = '📊 Status: ' + data.yield_status;
+
+      // farming tips
+      var tipsBox = document.getElementById('farmingTips');
+      tipsBox.innerHTML = '';
+      if (data.farming_tips) {
+        data.farming_tips.forEach(function(tip) {
+          var li = document.createElement('li');
+          li.textContent = '✅ ' + tip;
+          tipsBox.appendChild(li);
+        });
+      }
+
+      // soil advice
+      var soilBox = document.getElementById('soilAdvice');
+      soilBox.innerHTML = '';
+      if (data.soil_advice) {
+        data.soil_advice.forEach(function(advice) {
+          var li = document.createElement('li');
+          li.textContent = '🌱 ' + advice;
+          soilBox.appendChild(li);
+        });
+      }
+
+      // SHOW the result box using inline style
+      var box = document.getElementById('resultBox');
+      box.setAttribute('style',
+        'display:block;' +
+        'background:linear-gradient(135deg,#0d3320,#1a5c38);' +
+        'border-radius:16px;' +
+        'padding:2.5rem;' +
+        'color:#ffffff;' +
+        'margin-top:1.5rem;' +
+        'text-align:center;' +
+        'animation:fadeUp 0.5s ease;'
+      );
+
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
     async function predictYield() {
 
-      const crop       = document.getElementById('crop').value;
-      const temp       = document.getElementById('temp').value;
-      const rain       = document.getElementById('rain').value;
-      const humidity   = document.getElementById('humidity').value;
-      const area       = document.getElementById('area').value;
-      const fertilizer = document.getElementById('fertilizer').value;
-      const season     = document.getElementById('season').value;
-      const soil       = document.getElementById('soil').value;
-      const ph_level   = document.getElementById('ph_level').value;
-      const irrigation = document.getElementById('irrigation').value;
+      var crop       = document.getElementById('crop').value;
+      var temp       = parseFloat(document.getElementById('temp').value);
+      var rain       = parseFloat(document.getElementById('rain').value);
+      var humidity   = parseFloat(document.getElementById('humidity').value);
+      var area       = parseFloat(document.getElementById('area').value);
+      var fertilizer = document.getElementById('fertilizer').value;
+      var season     = document.getElementById('season').value;
+      var soil       = document.getElementById('soil').value;
+      var ph_level   = parseFloat(document.getElementById('ph_level').value);
+      var irrigation = document.getElementById('irrigation').value;
 
-      const btn = document.querySelector('.btn-predict');
+      var btn    = document.getElementById('predictBtn');
+      var errBox = document.getElementById('apiError');
+
       btn.textContent = '⏳ Analyzing...';
       btn.disabled    = true;
+      errBox.style.display = 'none';
 
       try {
-
-        const response = await fetch('http://127.0.0.1:5000/api/predict', {
+        var response = await fetch('http://127.0.0.1:5000/api/predict', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
-            crop, temperature: temp, rainfall: rain,
-            humidity, area, fertilizer, season, soil,
-            ph_level, irrigation
+            crop:        crop,
+            temperature: temp,
+            rainfall:    rain,
+            humidity:    humidity,
+            area:        area,
+            fertilizer:  fertilizer,
+            season:      season,
+            soil:        soil,
+            ph_level:    ph_level,
+            irrigation:  irrigation
           })
         });
 
-        const data = await response.json();
+        var data = await response.json();
 
-        if (data.status === 'success') {
-
-          document.getElementById('yieldValue').textContent  = data.predicted_yield;
-          document.getElementById('totalYield').textContent  = `Total expected: ${data.total_yield} tons from your ${data.area} ha farm`;
-          document.getElementById('yieldStatus').textContent = `📊 Status: ${data.yield_status}`;
-
-          if (data.farming_tips) {
-            const tipsBox     = document.getElementById('farmingTips');
-            tipsBox.innerHTML = '';
-            data.farming_tips.forEach(tip => {
-              const li = document.createElement('li');
-              li.textContent = '✅ ' + tip;
-              tipsBox.appendChild(li);
-            });
-          }
-
-          if (data.soil_advice) {
-            const soilBox     = document.getElementById('soilAdvice');
-            soilBox.innerHTML = '';
-            data.soil_advice.forEach(advice => {
-              const li = document.createElement('li');
-              li.textContent = '🌱 ' + advice;
-              soilBox.appendChild(li);
-            });
-          }
-
-          const box = document.getElementById('resultBox');
-          box.classList.remove('show');
-          setTimeout(() => { box.classList.add('show'); }, 100);
+        if (data.predicted_yield !== undefined && data.predicted_yield !== null) {
+          showResult(data, area);
+        } else {
+          errBox.textContent   = '❌ ' + (data.message || 'Prediction failed!');
+          errBox.style.display = 'block';
         }
 
       } catch (error) {
-        alert('Cannot connect to backend! Make sure Flask is running on port 5000.');
+        errBox.textContent   = '❌ Cannot connect to backend! Make sure Flask is running on port 5000.';
+        errBox.style.display = 'block';
       }
 
       btn.textContent = '🌾 Predict My Yield';
       btn.disabled    = false;
     }
+
   </script>
 
 </body>
