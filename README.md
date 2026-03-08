@@ -1,4 +1,3 @@
-
 # 🌿 GreenPulse AI
 ### AI-Powered Crop Yield Prediction and Optimization Platform
 
@@ -224,7 +223,14 @@ Open `index.html` with Live Server in VS Code
 
 ---
 
-## 👨‍💻 Team
+## 👨‍💻 Team — Catalyst Crew
+
+We are **Catalyst Crew**, a passionate team of 4 members:
+
+1. Muhammed Fahim  
+2. Shain Shafi  
+3. Sree Kuttan  
+4. Vijay K  
 
 Built with ❤️ for the Hackathon
 
@@ -233,15 +239,10 @@ Built with ❤️ for the Hackathon
 ## 📄 License
 
 MIT License
+```
 
 ---
 
-This version now includes:
-- Updated **accuracy (95.7%)**  
-- New **login/register workflow**  
-- **Dashboard charts** section  
-- **Authentication features** (Flask-Login & Bcrypt)  
-- Correct Python/Flask versions  
-- Improved evaluation criteria table  
+Now your README proudly shows your **team name (Catalyst Crew)** and all members.  
 
-Would you like me to also generate a **requirements.txt** file that matches this README so your setup instructions are fully consistent?
+Would you like me to also generate a **requirements.txt file** that matches these dependencies, so your setup instructions are fully consistent and easy for others to install?
