@@ -1,10 +1,11 @@
+
 # 🌿 GreenPulse AI
 ### AI-Powered Crop Yield Prediction and Optimization Platform
 
 ![GreenPulse AI](https://img.shields.io/badge/GreenPulse-AI-green)
-![Python](https://img.shields.io/badge/Python-3.14-blue)
-![Flask](https://img.shields.io/badge/Flask-3.1-lightgrey)
-![AI](https://img.shields.io/badge/AI-92.7%25%20Accuracy-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.13-blue)
+![Flask](https://img.shields.io/badge/Flask-3.0-lightgrey)
+![AI](https://img.shields.io/badge/AI-95.7%25%20Accuracy-brightgreen)
 
 ---
 
@@ -36,60 +37,92 @@ Farmers face huge financial losses due to:
 
 | Feature | Description |
 |---------|-------------|
-| 🤖 AI Yield Prediction | Predicts crop yield with 92.7% accuracy |
+| 🤖 AI Yield Prediction | Predicts crop yield with 95.7% accuracy |
 | 🔬 Disease Detection | Detects 4 crop diseases with 98.8% accuracy |
 | 🌦️ Real Weather Data | Live weather from OpenWeatherMap API |
 | 📧 Email Alerts | Automatic alerts for weather risks |
 | 📊 Farm Dashboard | Real-time monitoring of farm conditions |
+| 🔒 Secure Authentication | Farmer login with Flask-Login & Bcrypt |
 
 ---
 
 ## 🖥️ Pages
 
-- **index.html** — Landing page with features overview
-- **register.html** — Farmer registration
-- **dashboard.html** — Real-time farm dashboard
-- **predict.html** — AI crop yield prediction
-- **upload.html** — Plant disease detection
+- **index.html** — Landing page with features overview  
+- **login.html** —  
+  ✅ Brand new login page  
+  ✅ Connects to Flask backend  
+  ✅ Saves farmer to localStorage  
+  ✅ Press Enter to login  
+
+- **register.html** —  
+  ✅ Connects to real backend  
+  ✅ Shows real error messages  
+  ✅ Redirects after success  
+
+- **dashboard.html** — Real-time farm dashboard with charts and predictions  
+- **predict.html** — AI crop yield prediction  
+- **upload.html** — Plant disease detection  
+
+---
+
+## 🌾 Workflow Updates
+
+- When farmer clicks **Predict** →  
+  ✅ AI predicts yield  
+  ✅ Result saved to database  
+  ✅ Linked to farmer’s account  
+  ✅ Shows in **Recent Predictions** table  
+
+---
+
+## 📊 Dashboard Charts
+
+| Chart | Type | Description |
+|-------|------|-------------|
+| 📊 Crop Yield Bar | Bar Chart | Compare all 8 crops side by side |
+| 🥧 Crop Distribution | Pie Chart | See how farm area is split |
+| 🌧️ Monthly Rainfall | Bar Chart | Blue bars show rainfall per month |
+| 🌡️ Weather Gauges | Circular Gauges | Temperature & Humidity, live updates |
+| 🦠 Disease Risk | Doughnut Chart | Risk levels for 4 crop diseases |
 
 ---
 
 ## 🤖 AI Models
 
 ### Model 1 — Crop Yield Prediction
-- Algorithm: Random Forest Regressor
-- Accuracy: **92.7%**
-- Inputs: Crop type, temperature, rainfall, humidity,
-  area, fertilizer, soil type, season
-- Output: Predicted yield in tons per hectare
+- Algorithm: Random Forest Regressor  
+- Accuracy: **95.7%**  
+- Inputs: Crop type, temperature, rainfall, humidity, area, fertilizer, soil type, season  
+- Output: Predicted yield in tons per hectare  
 
 ### Model 2 — Disease Detection
-- Algorithm: Random Forest Classifier
-- Accuracy: **98.8%**
-- Detects: Healthy Leaf, Leaf Blight,
-  Rust Disease, Powdery Mildew
-- Input: Leaf image upload
+- Algorithm: Random Forest Classifier  
+- Accuracy: **98.8%**  
+- Detects: Healthy Leaf, Leaf Blight, Rust Disease, Powdery Mildew  
+- Input: Leaf image upload  
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- HTML5, CSS3, JavaScript
-- Chart.js for data visualization
-- Responsive design for mobile and desktop
+- HTML5, CSS3, JavaScript  
+- Chart.js for data visualization  
+- Responsive design for mobile and desktop  
 
 ### Backend
-- Python 3.14
-- Flask 3.1
-- Flask-CORS
-- Scikit-learn
-- Pandas, NumPy
-- Pillow (image processing)
+- Python 3.13  
+- Flask 3.0  
+- Flask-CORS  
+- Flask-Login, Flask-Bcrypt  
+- Scikit-learn  
+- Pandas, NumPy  
+- Pillow (image processing)  
 
 ### APIs
-- OpenWeatherMap API (real weather data)
-- Gmail SMTP (email alerts)
+- OpenWeatherMap API (real weather data)  
+- Gmail SMTP (email alerts)  
 
 ---
 
@@ -97,6 +130,7 @@ Farmers face huge financial losses due to:
 ```
 GreenPulse-AI/
 ├── index.html          # Landing page
+├── login.html          # Farmer login
 ├── register.html       # Registration
 ├── dashboard.html      # Farm dashboard
 ├── predict.html        # Yield prediction
@@ -139,7 +173,7 @@ venv\Scripts\activate
 
 ### STEP 3 — Install packages
 ```bash
-pip install flask flask-cors requests python-dotenv scikit-learn pandas numpy joblib pillow
+pip install flask flask-cors flask-login flask-bcrypt requests python-dotenv scikit-learn pandas numpy joblib pillow
 ```
 
 ### STEP 4 — Set up .env file
@@ -180,13 +214,13 @@ Open `index.html` with Live Server in VS Code
 
 ## 🎯 Evaluation Criteria
 
-| Criteria | Weight | Our Score |
-|----------|--------|-----------|
-| Accuracy of Yield Prediction | 40% | 92.7% accurate AI model |
-| Actionability of Recommendations | 25% | Farming tips + alerts |
-| Scalability & Data Integration | 20% | Flask REST API |
-| User Adoption & Usability | 10% | Simple clean UI |
-| Documentation & Sustainability | 5% | Full documentation |
+| Criteria | Weight | Your Solution |
+|----------|--------|---------------|
+| Accuracy of Yield Prediction | 40% | **95.7% accurate ✅** |
+| Actionability of Recommendations | 25% | **Farming tips ✅** |
+| Scalability & Data Integration | 20% | **Flask REST API ✅** |
+| User Adoption & Usability | 10% | **Clean UI ✅** |
+| Documentation & Sustainability | 5% | **README ✅** |
 
 ---
 
@@ -199,4 +233,15 @@ Built with ❤️ for the Hackathon
 ## 📄 License
 
 MIT License
-```
+
+---
+
+This version now includes:
+- Updated **accuracy (95.7%)**  
+- New **login/register workflow**  
+- **Dashboard charts** section  
+- **Authentication features** (Flask-Login & Bcrypt)  
+- Correct Python/Flask versions  
+- Improved evaluation criteria table  
+
+Would you like me to also generate a **requirements.txt** file that matches this README so your setup instructions are fully consistent?
