@@ -1,322 +1,416 @@
-# 🌿 GreenPulse AI — Smart Farming Platform
+# 🩺 VitaSense AI — Diabetes Prediction & Management Platform
 
-![GreenPulse AI](https://img.shields.io/badge/GreenPulse-AI-2ecc71?style=for-the-badge&logo=leaf)
-![Python](https://img.shields.io/badge/Python-3.14-blue?style=for-the-badge&logo=python)
-![Flask](https://img.shields.io/badge/Flask-3.1.3-black?style=for-the-badge&logo=flask)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.8.0-orange?style=for-the-badge&logo=scikit-learn)
-![SQLite](https://img.shields.io/badge/SQLite-Database-blue?style=for-the-badge&logo=sqlite)
+<div align="center">
 
-> **AI-Powered Crop Yield Prediction and Optimization Platform for Smart Farmers**
+![VitaSense AI](https://img.shields.io/badge/VitaSense-AI-0EA5E9?style=for-the-badge&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.x-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
----
+**98.2% Accuracy · ROC-AUC 0.9975 · 5,000 Patient Records · 16 AI Features**
 
-## 👥 Team — Catalyst Crew
+[Features](#-features) · [Demo](#-demo) · [Installation](#-installation) · [API](#-api-endpoints) · [Tech Stack](#-tech-stack) · [Model](#-ai-model)
 
-| Name | Role |
-|------|------|
-| Muhammed Fahim M | Team Lead & Full Stack Developer |
-| Shain Shafi H | Backend Developer |
-| Vijay K | Frontend Developer |
-| Sreekuttan S | AI & Data Science |
+</div>
 
 ---
 
-## 📌 Project Overview
+## 📌 Overview
 
-GreenPulse AI is an intelligent agriculture platform that helps farmers maximize their crop yield using Machine Learning. The platform predicts crop yield with **95.7% accuracy**, detects plant diseases with **98.8% accuracy**, provides real-time weather monitoring, and sends smart farming alerts.
+**VitaSense AI** is an intelligent, web-based diabetes prediction and management platform. It uses a **Voting Ensemble** of Random Forest and Gradient Boosting to predict diabetes risk from basic medical parameters — and returns a complete personalised action plan covering diet, exercise, lifestyle and monitoring.
 
----
-
-## ✨ Features
-
-| Feature | Description | Status |
-|---------|-------------|--------|
-| 🌾 Crop Yield Prediction | AI predicts yield for 15 crops | ✅ |
-| 🔬 Disease Detection | Detects 4 plant diseases from leaf images | ✅ |
-| 🌦️ Weather Monitoring | Real-time weather data for any city | ✅ |
-| 🔔 Smart Alerts | Email alerts for weather risks | ✅ |
-| 👨‍🌾 Farmer Login | Secure registration and login system | ✅ |
-| 🗄️ Database | Save farmer profiles and predictions | ✅ |
-| 📊 Dashboard | 5 interactive charts and analytics | ✅ |
-| 🌱 Farming Tips | Crop-specific and soil-specific advice | ✅ |
+> ⚕️ **Disclaimer:** This application is for **educational and screening purposes only**. It is not a medical diagnosis. Always consult a qualified doctor.
 
 ---
 
-## 🤖 AI Models
+## 🚀 Features
 
-### Model 1 — Crop Yield Prediction
+| Feature | Description |
+|---|---|
+| 🤖 **AI Risk Prediction** | Voting Ensemble (RF + GB) · Exact risk % (0–100) · 98.2% accuracy |
+| 📊 **Confidence Score** | Evaluates data quality and consistency · Unique transparency feature |
+| 🥗 **Diet Recommendations** | 5 foods to eat + 5 to avoid with medical reasons · Personalised by risk level |
+| 🏃 **Exercise Plans** | Duration, frequency and intensity tailored to your exact risk |
+| 💡 **Lifestyle Guidance** | Sleep, stress, water intake, smoking and alcohol advice |
+| 📋 **Monitoring Schedule** | How often to check blood sugar, HbA1c and doctor visit frequency |
+| 💬 **Diabetes Chatbot** | 20 educational topics · Keyword-based with curated medical responses |
+| 📊 **Reference Ranges** | Age-group specific normal values for all 8 parameters |
+| 📈 **Analytics Dashboard** | Prediction history, risk distribution, health score trends |
+| 🗄️ **Dataset Viewer** | Full 5,000-record training dataset with search, filter and CSV export |
+
+---
+
+## 🖥️ Demo
+
+### Prediction Flow
 ```
-Algorithm  : Gradient Boosting Regressor
-Library    : Scikit-learn
-Accuracy   : 95.7%
-Training   : 3,000 samples
-Crops      : 15 crops supported
-Features   : 10 input parameters
-```
-
-**Supported Crops:**
-Wheat, Maize, Rice, Tomato, Cotton, Potato, Sugarcane, Soybean, Sunflower, Groundnut, Onion, Banana, Mango, Chilli, Turmeric
-
-**Input Features:**
-- Crop Type
-- Temperature (°C)
-- Rainfall (mm/year)
-- Humidity (%)
-- Farm Area (hectares)
-- Fertilizer Type
-- Soil Type
-- Growing Season
-- pH Level
-- Irrigation Type
-
-### Model 2 — Disease Detection
-```
-Algorithm  : Random Forest Classifier
-Library    : Scikit-learn + Pillow
-Accuracy   : 98.8%
-Training   : 800 leaf images
-Diseases   : 4 classes detected
+User enters glucose, BP, BMI, DPF, age
+         ↓
+Optional fields (pregnancies, skin thickness, insulin) auto-imputed if blank
+         ↓
+16 features engineered (including HOMA-IR insulin resistance)
+         ↓
+Voting Ensemble predicts risk probability
+         ↓
+Full result: risk %, HbA1c estimate, health score, % breakdown
+         ↓
+Personalised diet + exercise + lifestyle + monitoring plan
 ```
 
-**Detected Diseases:**
-- ✅ Healthy Leaf (100% accuracy)
-- 🟡 Leaf Blight (95% accuracy)
-- 🟠 Rust Disease (95% accuracy)
-- ⚪ Powdery Mildew (100% accuracy)
+### Sample Result
+```json
+{
+  "prediction": "Diabetic",
+  "risk_percentage": 73.4,
+  "risk_level": "High",
+  "urgency_level": "See Doctor Now",
+  "health_metrics": {
+    "hba1c_estimate": 7.6,
+    "bmi_status": "Obese",
+    "health_score": 34
+  },
+  "percentage_breakdown": {
+    "glucose_contribution": 82.0,
+    "bmi_contribution": 71.0,
+    "age_contribution": 62.0
+  }
+}
+```
 
 ---
 
-## 🛠️ Tech Stack
-
-### Frontend
-- HTML5, CSS3, JavaScript (Vanilla)
-- Chart.js — Interactive charts
-- Google Fonts — Playfair Display + DM Sans
-- Live Server — Development server
-
-### Backend
-- Python 3.14
-- Flask 3.1.3 — Web framework
-- Flask-CORS — Cross-origin requests
-- Flask-SQLAlchemy — Database ORM
-- Flask-Login — Session management
-- Flask-Bcrypt — Password hashing
-
-### AI & Data Science
-- Scikit-learn 1.8.0 — ML algorithms
-- Pandas 3.0.1 — Data handling
-- NumPy 2.4.2 — Numerical computing
-- Pillow 12.1.1 — Image processing
-- Joblib 1.5.3 — Model persistence
-
-### Database & Services
-- SQLite — Local database
-- OpenWeatherMap API — Real weather data
-- Gmail SMTP — Email alerts
-
----
-
-## 📁 Project Structure
+## 🗂️ Project Structure
 
 ```
-GreenPulse-AI/
+VitaSense-AI-v2/
 │
-├── 📄 index.html              → Landing page
-├── 📄 login.html              → Farmer login
-├── 📄 register.html           → Farmer registration
-├── 📄 dashboard.html          → Analytics dashboard
-├── 📄 predict.html            → Yield prediction
-├── 📄 upload.html             → Disease detection
+├── vitasense.html              # Complete frontend (CSS + HTML + JS)
 │
-├── 🐍 backend/
-│   ├── app.py                 → Flask main app
-│   ├── models.py              → Database models
-│   ├── ai_model.py            → Yield prediction AI
-│   ├── disease_model.py       → Disease detection AI
-│   ├── train_model.py         → Train yield model
-│   ├── train_disease_model.py → Train disease model
-│   │
-│   ├── routes/
-│   │   ├── predict.py         → Prediction API
-│   │   ├── weather.py         → Weather API
-│   │   ├── disease.py         → Disease API
-│   │   └── auth.py            → Login/Register API
-│   │
-│   ├── services/
-│   │   ├── weather_service.py → OpenWeatherMap
-│   │   └── email_service.py   → Gmail alerts
-│   │
-│   └── models/
-│       ├── crop_yield_model.pkl  → Trained yield AI
-│       ├── disease_model.pkl     → Trained disease AI
-│       └── feature_names.pkl     → Feature metadata
-│
-├── 📋 requirements.txt
-├── 🔒 .env
-└── 📖 README.md
+└── backend/
+    ├── app.py                  # Flask server · CORS · Port 5000
+    ├── models.py               # SQLite DB setup · 2 tables
+    ├── ai_model.py             # Loads pkl files · Runs prediction
+    ├── recommendation.py       # Diet · Exercise · Lifestyle · Monitoring data
+    ├── chatbot_model.py        # 20-topic keyword chatbot
+    ├── train_model.py          # Dataset generator + model training
+    │
+    ├── routes/
+    │   ├── __init__.py
+    │   ├── predict.py          # POST /predict · GET /dataset · GET /dashboard/stats
+    │   └── chatbot.py          # POST /chat · GET /chat/topics
+    │
+    └── models/                 # Auto-created after running train_model.py
+        ├── vitasense_model.pkl
+        ├── vitasense_scaler.pkl
+        ├── vitasense_imputer.pkl
+        └── vitasense_medians.pkl
 ```
 
 ---
 
-## 🚀 Setup & Installation
+## ⚙️ Installation
 
 ### Prerequisites
-- Python 3.10+
-- Git
-- VS Code with Live Server extension
+- Python 3.8+
+- VS Code with **Live Server** extension installed
 
-### Step 1 — Clone Repository
+### Step 1 — Clone the repository
 ```bash
-git clone https://github.com/muhammedfahim438-ctrl/GreenPulse-AI.git
-cd GreenPulse-AI
+git clone https://github.com/YOUR_USERNAME/VitaSense-AI-v2.git
+cd VitaSense-AI-v2
 ```
 
-### Step 2 — Create Virtual Environment
+### Step 2 — Create virtual environment
 ```bash
+# Windows
 python -m venv venv
-venv\Scripts\activate       # Windows
-source venv/bin/activate    # Mac/Linux
+venv\Scripts\activate
+
+# Mac / Linux
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### Step 3 — Install Dependencies
+### Step 3 — Install dependencies
 ```bash
-pip install -r requirements.txt
+pip install flask flask-cors scikit-learn numpy pandas
 ```
 
-### Step 4 — Configure Environment
-Create a `.env` file in the root folder:
-```env
-WEATHER_API_KEY=your_openweathermap_api_key
-EMAIL_ADDRESS=your_gmail@gmail.com
-EMAIL_PASSWORD=your_gmail_app_password
-ALERT_EMAIL=recipient@gmail.com
-```
-
-### Step 5 — Train AI Models
+### Step 4 — Train the model (run once only)
 ```bash
 cd backend
 python train_model.py
-python train_disease_model.py
 ```
 
-### Step 6 — Run Flask Backend
+Expected output:
+```
+============================================================
+  VitaSense AI — Model Training
+============================================================
+[1/5] Generating dataset (5000 records, 16 features)...
+[2/5] Optional-field medians...
+[3/5] Imputing + scaling...
+[4/5] Training Voting Ensemble (RF + GB)...
+[5/5] Evaluating model...
+  Accuracy  : 98.2%
+  ROC-AUC   : 0.9975
+  ✓ Model   → backend/models/vitasense_model.pkl
+  Training complete!
+============================================================
+```
+
+### Step 5 — Start the backend server
 ```bash
-cd backend
 python app.py
 ```
-Backend runs at: `http://127.0.0.1:5000`
 
-### Step 7 — Open Frontend
-Right-click `index.html` → **Open with Live Server**
-Frontend runs at: `http://127.0.0.1:5500`
+Server starts at `http://localhost:5000`
+
+### Step 6 — Open the frontend
+Right-click `vitasense.html` in VS Code → **Open with Live Server**
+
+Navigate to `http://127.0.0.1:5500/vitasense.html`
 
 ---
 
 ## 🔌 API Endpoints
 
+Base URL: `http://localhost:5000`
+
+### Prediction
+
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Health check |
-| POST | `/api/auth/register` | Register farmer |
-| POST | `/api/auth/login` | Login farmer |
-| POST | `/api/auth/logout` | Logout farmer |
-| GET | `/api/auth/profile` | Get farmer profile |
-| POST | `/api/predict` | Predict crop yield |
-| GET | `/api/predictions` | Get prediction history |
-| GET | `/api/weather` | Get weather data |
-| POST | `/api/disease` | Detect plant disease |
-| POST | `/api/alert/send` | Send email alert |
+|---|---|---|
+| `POST` | `/predict` | Run AI prediction · Accepts JSON or form-data |
+| `GET` | `/predictions/history` | Last N predictions · `?limit=20` |
+| `GET` | `/dashboard/stats` | Aggregated stats for Dashboard charts |
+| `GET` | `/dataset` | All 5,000 training records for Dataset tab |
+
+#### POST `/predict` — Request Body
+```json
+{
+  "glucose": 148,
+  "blood_pressure": 85,
+  "bmi": 33.6,
+  "dpf": 0.627,
+  "age": 50,
+  "pregnancies": 3,
+  "skin_thickness": 35,
+  "insulin": 80
+}
+```
+> `pregnancies`, `skin_thickness` and `insulin` are optional — omit them and the model auto-imputes using training medians.
+
+### Chatbot
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/chat` | Send a message · Get educational response |
+| `GET` | `/chat/topics` | All 20 topic titles for quick-reply buttons |
+| `GET` | `/chat/history` | Last N messages · `?limit=50` |
+
+### Health Check
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Server health check · Lists all endpoints |
 
 ---
 
-## 🗄️ Database Schema
+## 🤖 AI Model
 
-### Farmers Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer | Primary key |
-| first_name | String | Farmer's first name |
-| last_name | String | Farmer's last name |
-| email | String | Unique email |
-| phone | String | Phone number |
-| location | String | Farm location |
-| farm_size | Float | Farm size in hectares |
-| primary_crop | String | Main crop grown |
-| password | String | Hashed password |
-| created_at | DateTime | Registration date |
-
-### Predictions Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer | Primary key |
-| farmer_id | Integer | Foreign key |
-| crop | String | Crop type |
-| predicted_yield | Float | AI prediction |
-| total_yield | Float | Total yield |
-| yield_status | String | Excellent/Good/Average/Low |
-| created_at | DateTime | Prediction date |
-
----
-
-## 📊 Dashboard Charts
-
-1. **📊 Crop Yield Bar Chart** — Compare yield across 8 crops
-2. **🥧 Crop Distribution Pie** — Farm area distribution
-3. **🌧️ Monthly Rainfall Bar** — Rainfall trends per month
-4. **🌡️ Temperature & Humidity Gauges** — Live farm conditions
-5. **🦠 Disease Risk Doughnut** — Disease risk levels
-
----
-
-## 🧪 Testing
-
-### Test Registration
-```powershell
-Invoke-WebRequest -Uri "http://127.0.0.1:5000/api/auth/register" `
-  -Method POST -ContentType "application/json" `
-  -Body '{"first_name":"Ravi","last_name":"Kumar","email":"ravi@gmail.com","password":"farmer123","location":"Chennai","farm_size":5,"primary_crop":"wheat"}'
+### Architecture
+```
+Input (5–8 params) → Feature Engineering (16 features) → Imputer → Scaler
+        ↓
+  ┌─────────────┐     ┌──────────────────┐
+  │Random Forest│     │Gradient Boosting │
+  │  300 trees  │  +  │   300 trees      │
+  │  (bagging)  │     │  (sequential)    │
+  └──────┬──────┘     └────────┬─────────┘
+         │                     │
+         └─────── Soft Vote ───┘
+                     ↓
+              Risk % (0–100)
 ```
 
-### Test Prediction
-```powershell
-Invoke-WebRequest -Uri "http://127.0.0.1:5000/api/predict" `
-  -Method POST -ContentType "application/json" `
-  -Body '{"crop":"wheat","temperature":28,"rainfall":800,"humidity":65,"area":5,"fertilizer":"high","soil":"alluvial","season":"rabi","ph_level":6.5,"irrigation":"drip"}'
+### Model Parameters
+
+**Random Forest**
+```python
+RandomForestClassifier(
+    n_estimators=300, max_depth=10,
+    min_samples_split=4, min_samples_leaf=2,
+    max_features="sqrt", class_weight="balanced",
+    random_state=42, n_jobs=-1
+)
+```
+
+**Gradient Boosting**
+```python
+GradientBoostingClassifier(
+    n_estimators=300, learning_rate=0.05,
+    max_depth=5, subsample=0.8,
+    min_samples_split=4, random_state=42
+)
+```
+
+### Performance
+
+| Metric | Value |
+|---|---|
+| Accuracy | **98.2%** |
+| ROC-AUC | **0.9975** |
+| Cross-validation | 5-fold stratified |
+| Train/Test split | 80% / 20% stratified |
+
+### 8 Input Parameters
+
+| Parameter | Type | Range |
+|---|---|---|
+| Glucose | Required | 50–400 mg/dL |
+| Blood Pressure | Required | 40–160 mmHg |
+| BMI | Required | 10–70 kg/m² |
+| Diabetes Pedigree Function | Required | 0.05–3.0 |
+| Age | Required | 1 month–120 years |
+| Pregnancies | Optional | 0–20 |
+| Skin Thickness | Optional | 0–100 mm |
+| Insulin | Optional | 0–900 µU/mL |
+
+### 8 Engineered Features
+
+| Feature | Formula | Medical Meaning |
+|---|---|---|
+| HOMA-IR | (Insulin × Glucose) / 405 | Insulin resistance biomarker |
+| Glucose-BMI Ratio | Glucose ÷ BMI | Compound risk factor |
+| Age-BMI Interaction | (Age × BMI) / 100 | Age-compounded obesity risk |
+| Glucose-Age Ratio | Glucose ÷ Age | Age-adjusted glucose significance |
+| BMI Category | 0–3 ordinal | Underweight/Normal/Overweight/Obese |
+| Glucose Category | 0–2 ordinal | Normal/Prediabetes/High |
+| BP Category | 0–2 ordinal | Normal/Elevated/High |
+| Age Category | 0–3 ordinal | Under 30 / 30–45 / 45–60 / Over 60 |
+
+---
+
+## 🗃️ Database
+
+SQLite database (`vitasense.db`) with 2 tables:
+
+**`predictions`** — stores every prediction with all inputs, outputs, % breakdowns, urgency and recommendation message
+
+**`chat_history`** — stores every chatbot conversation with detected topic and timestamp
+
+---
+
+## 💬 Chatbot Topics (20)
+
+What is diabetes · Symptoms · Normal blood sugar · HbA1c · Diet advice · Foods to avoid · Exercise · Causes · Complications · Low blood sugar emergency · High blood sugar emergency · Prevention · BMI · Insulin · Stress · Water intake · Sleep · Foot care · Pregnancy · Blood sugar monitoring
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Python 3, Flask, Flask-CORS |
+| ML | Scikit-learn, NumPy, Pandas, Pickle |
+| Database | SQLite3 |
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Charts | Chart.js 4.4.0 |
+| Fonts | Outfit, Plus Jakarta Sans (Google Fonts) |
+| Dev Tools | VS Code, Live Server extension |
+
+---
+
+## 📦 Dependencies
+
+```
+flask
+flask-cors
+scikit-learn
+numpy
+pandas
+```
+
+Install all with:
+```bash
+pip install flask flask-cors scikit-learn numpy pandas
 ```
 
 ---
 
-## 🏆 Hackathon Evaluation
+## 🔒 Safety & Ethics
 
-| Criteria | Weight | Score |
-|----------|--------|-------|
-| AI Accuracy | 40% | 38/40 |
-| Actionability | 25% | 24/25 |
-| Scalability | 20% | 19/20 |
-| Usability | 10% | 10/10 |
-| Documentation | 5% | 5/5 |
-| **Total** | **100%** | **96/100** |
+- ✅ Never suggests medicines or drug dosages
+- ✅ Every result includes a medical disclaimer
+- ✅ Chatbot always ends responses with "consult a doctor"
+- ✅ All predictions labelled as educational screening only
+- ✅ No user registration or personal data collection
+- ✅ Infants (age < 1 year) always receive "See Doctor Now" urgency
 
 ---
 
-## 👨‍💻 Team — Catalyst Crew
+## 🗺️ Future Scope
 
-| Name | GitHub |
-|------|--------|
-| Muhammed Fahim M | [@muhammedfahim438-ctrl](https://github.com/muhammedfahim438-ctrl) |
-| Shain Shafi H | — |
-| Vijay K | — |
-| Sreekuttan S | — |
+- [ ] Mobile app (React Native) for Android and iOS
+- [ ] Tamil, Hindi, Telugu language support
+- [ ] Hospital EMR system integration via REST API
+- [ ] Retrain on real anonymised clinical data
+- [ ] Wearable device integration for real-time glucose
+- [ ] Doctor dashboard portal for patient monitoring
+- [ ] LLM-powered chatbot with safety guardrails
 
 ---
 
-## 📜 License
+## 📁 Build Order
 
-This project is built for hackathon purposes by **Catalyst Crew**.
+If building from scratch, create files in this order:
+
+```
+1. train_model.py      → python train_model.py (run once)
+2. models.py
+3. ai_model.py
+4. recommendation.py
+5. chatbot_model.py
+6. routes/predict.py
+7. routes/chatbot.py
+8. app.py              → python app.py
+9. vitasense.html      → Open with Live Server
+```
+
+---
+
+## 👥 Team — Catalyst Crew
+
+**Hackathon Team · Nehru Arts and Science College, Coimbatore**
+
+| # | Name | Role | GitHub |
+|---|---|---|---|
+| 1 | **Muhammed Fahim M** | Project Lead · ML Engineer | [![GitHub](https://img.shields.io/badge/GitHub-muhammedfahim438--ctrl-181717?style=flat&logo=github)](https://github.com/muhammedfahim438-ctrl) |
+| 2 | **Shain Shafi H** | Backend Developer · API Engineer | [![GitHub](https://img.shields.io/badge/GitHub-Shahinshafi1717-181717?style=flat&logo=github)](https://github.com/Shahinshafi1717) |
+| 3 | **Vijay K** | Frontend Developer · UI Designer | [![GitHub](https://img.shields.io/badge/GitHub-vijaydk2006--wq-181717?style=flat&logo=github)](https://github.com/vijaydk2006-wq) |
+| 4 | **Sreekuttan S** | Data Engineer · Model Validation | [![GitHub](https://img.shields.io/badge/GitHub-Sreekuttan33714-181717?style=flat&logo=github)](https://github.com/Sreekuttan33714) |
+
+> Built with ❤️ for the hackathon · **VitaSense AI v2.0**
+
+---
+
+## 👨‍💻 Author
+
+**VitaSense AI v2.0**
+Built by Team Catalyst Crew — Nehru Arts and Science College, Coimbatore
+
+---
+
+## 📄 License
+
+This project is for educational purposes. All medical predictions are informational only and not a substitute for professional medical advice.
 
 ---
 
 <div align="center">
-  <strong>🌿 GreenPulse AI — Farming Smarter with AI 🌿</strong><br/>
-  <em>Built with ❤️ by Catalyst Crew</em>
+  <strong>VitaSense AI</strong> · Accuracy: 98.2% · ROC-AUC: 0.9975
+  <br/>
+  <em>Early awareness is the most powerful medicine we have.</em>
 </div>
